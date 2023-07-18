@@ -1,15 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+
+import store from './store';
 import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+import './index.css';
+import Localizer from './providers/Localizer.provider';
+import App from './containers/App.container';
+import YandexMetrikaComponent from './components/YandexMetrika.component';
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
+    <Provider store={store}>
+      <Localizer>
     <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+    <App />
+        <YandexMetrikaComponent />
+      </Localizer>
+    </Provider>
   </React.StrictMode>
 );
 
