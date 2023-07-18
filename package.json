@@ -1,7 +1,16 @@
 {
   "name": "ystuty-prkom-web",
   "version": "0.1.0",
+  "author": "xTCry [Vladislav Kh] (https://github.com/xTCry/)",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/YSTUty/ystuty-prkom-web.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/YSTUty/ystuty-prkom-web/issues"
+  },
   "dependencies": {
     "@appigram/react-yandex-metrika": "^2.8.4",
     "@reduxjs/toolkit": "^1.9.5",
