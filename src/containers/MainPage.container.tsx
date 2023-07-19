@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import store2 from 'store2';
 
 import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import * as envUtils from '../utils/env.utils';
 import { IncomingsLink } from '../interfaces/prkom.interface';
@@ -14,9 +16,11 @@ import IncomingsLinkList from '../components/IncomingsLinkList.component';
 const STORE_CACHED_FULL_LIST_KEY = 'CACHED_FULL_LIST';
 
 const MainPage = () => {
+  const { formatMessage } = useIntl();
   const [listData, setListData] = React.useState<IncomingsLink[]>([]);
   const [fetching, setFetching] = React.useState(false);
   const [isCached, setIsCached] = React.useState(false);
+  const [errorMsg, setErrorMsg] = React.useState<string | null>();
 
   const applyListData = React.useCallback(
     (items: IncomingsLink[] | null) => {
@@ -45,13 +49,22 @@ const MainPage = () => {
 
     fetch(`${envUtils.apiPath}/v1/admission/incomings_list`)
       .then((response) => response.json())
-      .then((response: IncomingsLink[] | { error: { error: string; message: string } }) => {
+      .then((response: IncomingsLink[] | { error: { code: number; error: string; message: string } }) => {
         if ('error' in response) {
-          alert(response.error.message);
+          if (response.error.code === 404) {
+            setErrorMsg(formatMessage({ id: 'response.error.code.404' }));
+            return;
+          }
+          if (response.error.code === 400) {
+            setErrorMsg(formatMessage({ id: 'response.error.code.400' }));
+            return;
+          }
+          setErrorMsg(`Error: ${response.error.message}`);
           console.error(response.error);
           return;
         }
         applyListData(response);
+        setErrorMsg(null);
       })
       .catch((e) => {
         applyListData(null);
@@ -83,7 +96,14 @@ const MainPage = () => {
         )}
       </Typography>
 
-      {listData.length === 0 ? (
+      {errorMsg ? (
+        <Paper elevation={3} sx={{ mt: 2, py: 2, textAlign: 'center' }}>
+          <Typography>{errorMsg}</Typography>
+          <IconButton onClick={() => fetchListData()} disabled={fetching}>
+            <RefreshIcon />
+          </IconButton>
+        </Paper>
+      ) : listData.length === 0 ? (
         <>
           <Typography>Loading...</Typography>
           <LinearProgress color="secondary" />

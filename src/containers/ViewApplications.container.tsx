@@ -1,15 +1,18 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import store2 from 'store2';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
+
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import * as envUtils from '../utils/env.utils';
 import { AbiturientCachedInfo } from '../interfaces/prkom.interface';
@@ -18,12 +21,13 @@ import AbiturientList from '../components/AbiturientList.component';
 
 const ViewApplications = () => {
   const { fileName } = useParams();
+  const { formatMessage } = useIntl();
   const STORE_CACHED_KEY = `ABIT_INFO_${fileName!.toUpperCase()}`;
 
   const [listData, setListData] = React.useState<AbiturientCachedInfo>();
   const [fetching, setFetching] = React.useState(false);
   const [isCached, setIsCached] = React.useState(false);
-  const [errorMsg, setErrorMsg] = React.useState<string>();
+  const [errorMsg, setErrorMsg] = React.useState<string | null>();
 
   const applyListData = React.useCallback(
     (info: AbiturientCachedInfo | null) => {
@@ -63,15 +67,20 @@ const ViewApplications = () => {
 
             if ('error' in response) {
               if (response.error.code === 404) {
-                setErrorMsg('Not found. [404]');
+                setErrorMsg(formatMessage({ id: 'response.error.code.404' }));
                 return;
               }
-              alert(response.error.message);
+              if (response.error.code === 400) {
+                setErrorMsg(formatMessage({ id: 'response.error.code.400' }));
+                return;
+              }
+              setErrorMsg(`Error: ${response.error.message}`);
               console.error(response.error);
               return;
             }
 
             applyListData(response || null);
+            setErrorMsg(null);
           },
         )
         .catch((e) => {
@@ -97,7 +106,12 @@ const ViewApplications = () => {
 
         <Container sx={{ width: '100%', pt: 5 }}>
           {errorMsg ? (
-            <Typography>{errorMsg}</Typography>
+            <Paper elevation={3} sx={{ mt: 2, py: 2, textAlign: 'center' }}>
+              <Typography>{errorMsg}</Typography>
+              <IconButton onClick={() => fetchListData(fileName!)} disabled={fetching}>
+                <RefreshIcon />
+              </IconButton>
+            </Paper>
           ) : (
             <>
               <Typography>Loading...</Typography>

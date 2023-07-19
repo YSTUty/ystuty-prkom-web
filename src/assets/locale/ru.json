@@ -26,5 +26,7 @@
   "component.telegramButton.title": "Начать отслеживание изменений в Telegram боте для этого заявления",
   "AbiturientInfoStateType.Unknown": "Неизвестно",
   "AbiturientInfoStateType.Submitted": "Подано",
-  "AbiturientInfoStateType.Enrolled": "Принято"
+  "AbiturientInfoStateType.Enrolled": "Принято",
+  "response.error.code.404": "Запрашиваемый файл не найден [404]",
+  "response.error.code.400": "Произошла ошибка. Возможно, данные еще не загрузились"
 }
