@@ -68,6 +68,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles: string[] }> = (
   const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
   const theme = useTheme();
 
+  const [alreadyScrolled, setAlreadyScrolled] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const userUidRowRef = React.useRef<HTMLTableRowElement>(null);
 
@@ -79,9 +80,13 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles: string[] }> = (
   };
 
   React.useEffect(() => {
+    if (alreadyScrolled || list.length === 0) {
+      return;
+    }
     const interval = setTimeout(scrollToRow, 900);
+    setAlreadyScrolled(true);
     return () => clearInterval(interval);
-  }, [list, scrollToRow]);
+  }, [list, scrollToRow, alreadyScrolled, setAlreadyScrolled]);
 
   if (list.length === 0) {
     return null;
