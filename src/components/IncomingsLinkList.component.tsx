@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -78,6 +78,7 @@ const IncomingsLinkItem: React.FC<{ info: IncomingsLink }> = (props) => {
 
 const SpecialityItem: React.FC<{ spec: IncomingsLink['specialties'][0] }> = (props) => {
   const { spec } = props;
+  const { formatMessage } = useIntl();
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -100,12 +101,39 @@ const SpecialityItem: React.FC<{ spec: IncomingsLink['specialties'][0] }> = (pro
         <List component="div" disablePadding>
           {spec.files.map((file) => {
             return (
-              <ListItemButton key={file.filename} sx={{ pl: 8 }} to={`/view/${file.filename}`} component={Link}>
+              <ListItemButton
+                key={file.filename}
+                sx={{ pl: 8 }}
+                to={`/view/${file.filename}`}
+                component={Link}
+                disabled={!file.countApplications}
+              >
                 <ListItemIcon>
                   <SpecialityItemIcon />
                 </ListItemIcon>
 
-                <ListItemText primary={file.name} />
+                <ListItemText
+                  primary={file.name}
+                  secondary={[
+                    // file.countPlaces &&
+                    formatMessage(
+                      { id: 'page.incomings.list.specialityItem.fileInfo.countPlaces' },
+                      { count: file.countPlaces },
+                    ),
+                    // file.countApplications &&
+                    formatMessage(
+                      { id: 'page.incomings.list.specialityItem.fileInfo.countApplications' },
+                      { count: file.countApplications || 0 },
+                    ),
+                    file.countEnrolled &&
+                      formatMessage(
+                        { id: 'page.incomings.list.specialityItem.fileInfo.countEnrolled' },
+                        { count: file.countEnrolled || 0 },
+                      ),
+                  ]
+                    .filter(Boolean)
+                    .join('; ')}
+                />
               </ListItemButton>
             );
           })}
