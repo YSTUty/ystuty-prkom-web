@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 
 import './index.css';
 import Localizer from './providers/Localizer.provider';
+import { ThemeModeProvider } from './providers/ThemeMode.provider';
 import App from './containers/App.container';
 import YandexMetrikaComponent from './components/YandexMetrika.component';
 
@@ -16,15 +17,15 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <Localizer>
-    <App />
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-    <App />
+        <ThemeModeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeModeProvider>
         <YandexMetrikaComponent />
       </Localizer>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

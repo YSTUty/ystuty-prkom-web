@@ -1,20 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import store2 from 'store2';
 
 export interface IAppState {
-  test: string;
+  userUid: string;
 }
+const urlParams = new URLSearchParams(window.location.search);
+const userUid = urlParams.get('userUid');
 
 const initialState: IAppState = {
-  test: 'test',
+  userUid: userUid || store2.get('app.userUid') || '',
 };
 
 export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    add: (state, action: PayloadAction<{ text: string }>) => {
-      const { text } = action.payload;
-      state.test = text;
+    setUserUid: (state, action: PayloadAction<string>) => {
+      const val = action.payload;
+      state.userUid = val;
+      store2.set('app.userUid', val);
     },
   },
 });

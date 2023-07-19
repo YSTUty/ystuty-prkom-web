@@ -1,3 +1,18 @@
+<p align="center"><img src="https://ystuty.github.io/docs/assets/img/YSTUty_logo-text-without-bg-shadow.png" width="150"></p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/package-json/v/YSTUty/ystuty-prkom-web?style=flat-square" alt="GitHub package.json version"/>
+  <img src="https://img.shields.io/github/last-commit/YSTUty/ystuty-prkom-web?style=flat-square" alt="GitHub last commit"/>
+  <br/>
+  <a href="https://t.me/ystu_pk_bot"><img src="https://img.shields.io/badge/Bot-Use now-229ED9?style=flat-square&logo=telegram" alt="Use Telegram bot now"/></a>
+</p>
+
+# [YSTUty] Списки поступающих *(PrKom List)*
+
+> Решение, использующее данные из сервиса [YSTUty-prkom](https://github.com/YSTUty/ystuty-prkom), для гибкого вывода списков поступающих.
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
