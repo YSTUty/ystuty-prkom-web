@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import store2 from 'store2';
 
 import Paper from '@mui/material/Paper';
+import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -20,6 +21,7 @@ const MainPage = () => {
   const [listData, setListData] = React.useState<IncomingsLink[]>([]);
   const [fetching, setFetching] = React.useState(false);
   const [isCached, setIsCached] = React.useState(false);
+  const [fetchedTime, setFetchedTime] = React.useState<number | null>();
   const [errorMsg, setErrorMsg] = React.useState<string | null>();
 
   const applyListData = React.useCallback(
@@ -63,8 +65,10 @@ const MainPage = () => {
           console.error(response.error);
           return;
         }
-        applyListData(response);
+
+        setFetchedTime(Date.now());
         setErrorMsg(null);
+        applyListData(response);
       })
       .catch((e) => {
         applyListData(null);
@@ -72,7 +76,7 @@ const MainPage = () => {
       .finally(() => {
         setFetching(false);
       });
-  }, [fetching, setFetching, applyListData]);
+  }, [fetching, setFetching, applyListData, setFetchedTime, setErrorMsg]);
 
   React.useEffect(() => {
     if (Math.random() > 0.6) {
@@ -86,32 +90,44 @@ const MainPage = () => {
   }, []);
 
   return (
-    <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-      <Typography component="h1" variant="h4" align="center">
-        <FormattedMessage id="page.main.title" />
-        {isCached && (
-          <Typography component={'span'} fontSize={9}>
-            cache
-          </Typography>
-        )}
-      </Typography>
+    <Container component="main" maxWidth="lg" sx={{ mb: 4, px: { xs: 1, sm: 3 } }}>
+      <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+        <Typography component="h1" variant="h4" align="center">
+          <FormattedMessage id="page.main.title" />
+          {isCached && (
+            <Typography component={'span'} fontSize={9}>
+              cache
+            </Typography>
+          )}
+        </Typography>
 
-      {errorMsg ? (
-        <Paper elevation={3} sx={{ mt: 2, py: 2, textAlign: 'center' }}>
-          <Typography>{errorMsg}</Typography>
-          <IconButton onClick={() => fetchListData()} disabled={fetching}>
-            <RefreshIcon />
-          </IconButton>
-        </Paper>
-      ) : listData.length === 0 ? (
-        <>
-          <Typography>Loading...</Typography>
-          <LinearProgress color="secondary" />
-        </>
-      ) : (
-        <IncomingsLinkList list={listData} />
-      )}
-    </Paper>
+        {errorMsg ? (
+          <Paper elevation={3} sx={{ mt: 2, py: 2, textAlign: 'center' }}>
+            <Typography>{errorMsg}</Typography>
+            <IconButton onClick={() => fetchListData()} disabled={fetching}>
+              <RefreshIcon />
+            </IconButton>
+          </Paper>
+        ) : listData.length === 0 ? (
+          <>
+            <Typography>Loading...</Typography>
+            <LinearProgress color="secondary" />
+          </>
+        ) : (
+          <>
+            <Typography fontSize={10}>
+              <IconButton onClick={() => fetchListData()} disabled={fetching}>
+                <RefreshIcon />
+              </IconButton>
+              {fetchedTime && (
+                <FormattedDate value={fetchedTime} day="2-digit" hour="2-digit" minute="2-digit" second="2-digit" />
+              )}
+            </Typography>
+            <IncomingsLinkList list={listData} />
+          </>
+        )}
+      </Paper>
+    </Container>
   );
 };
 

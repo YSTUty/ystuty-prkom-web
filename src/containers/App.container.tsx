@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
@@ -46,6 +48,9 @@ const Copyright = () => {
 };
 
 const App = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <>
       <AppBar
@@ -59,7 +64,13 @@ const App = () => {
       >
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap sx={{ mr: 2 }}>
-            [YSTUty] <FormattedMessage id="page.main.title" />
+            {!isSmallScreen ? (
+              <>
+                [YSTUty] <FormattedMessage id="page.main.title" />
+              </>
+            ) : (
+              <FormattedMessage id="page.main.title.short" />
+            )}
           </Typography>
           <Divider orientation="vertical" flexItem />
 
@@ -73,7 +84,7 @@ const App = () => {
           </FormControl>
         </Toolbar>
       </AppBar>
-      <Container component="main" maxWidth="xl" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth={false} sx={{ mb: 4, px: { xs: 1, sm: 3 } }}>
         <Routes>
           <Route path="/" element={<MainPageContainer />} />
           <Route path="/view/:fileName" element={<ViewApplicationsContainer />} />

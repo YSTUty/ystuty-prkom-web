@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import store2 from 'store2';
 
 import Box from '@mui/material/Box';
@@ -27,6 +27,7 @@ const ViewApplications = () => {
   const [listData, setListData] = React.useState<AbiturientCachedInfo>();
   const [fetching, setFetching] = React.useState(false);
   const [isCached, setIsCached] = React.useState(false);
+  const [fetchedTime, setFetchedTime] = React.useState<number | null>();
   const [errorMsg, setErrorMsg] = React.useState<string | null>();
 
   const applyListData = React.useCallback(
@@ -79,8 +80,9 @@ const ViewApplications = () => {
               return;
             }
 
-            applyListData(response || null);
+            setFetchedTime(Date.now());
             setErrorMsg(null);
+            applyListData(response || null);
           },
         )
         .catch((e) => {
@@ -131,6 +133,15 @@ const ViewApplications = () => {
         <Button component={Link} to="/">
           ← <FormattedMessage id="page.incomings.list.backHere" />
         </Button>
+
+        <Typography fontSize={10}>
+          <IconButton onClick={() => fetchListData(fileName!)} disabled={fetching}>
+            <RefreshIcon />
+          </IconButton>
+          {fetchedTime && (
+            <FormattedDate value={fetchedTime} day="2-digit" hour="2-digit" minute="2-digit" second="2-digit" />
+          )}
+        </Typography>
 
         <Paper sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h6" align="center" pb={3}>

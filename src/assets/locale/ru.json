@@ -1,7 +1,7 @@
 {
   "badges.loading": "Загрузка...",
-  "page.main.title.short": "ЯГТУ.PrKomList",
   "page.main.title": "ЯГТУ — Списки поступающих",
+  "page.main.title.short": "ЯГТУ. Списки",
   "page.main.header.field.uid": "Введите свой УК",
   "page.incomings.list.subheader": "Выбор специальности",
   "page.incomings.list.backHere": "Вернуться к списку специальностей",
