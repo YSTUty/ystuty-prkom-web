@@ -63,7 +63,12 @@ const App = () => {
         }}
       >
         <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap sx={{ mr: 2 }}>
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={(theme) => ({ mr: { xs: 1, sm: 2 }, fontSize: { xs: 16, sm: theme.typography.h6.fontSize } })}
+          >
             {!isSmallScreen ? (
               <>
                 [YSTUty] <FormattedMessage id="page.main.title" />
