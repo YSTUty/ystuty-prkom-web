@@ -165,8 +165,7 @@ export type IncomingsPageInfo = {
 };
 
 export type AbiturientInfo = AbiturientInfo_Bachelor | AbiturientInfo_Magister;
-export type AbiturientInfoComb = AbiturientInfo_Bachelor &
-  AbiturientInfo_Magister;
+export type AbiturientInfoComb = AbiturientInfo_Bachelor & AbiturientInfo_Magister;
 
 export type AbiturientInfo_Base = {
   /** Выделен зеленым */
@@ -216,5 +215,18 @@ export type AbiturientCachedInfo = {
     originalInfo: IncomingsPageOriginalInfo;
     list: AbiturientInfo[];
     titles: string[];
+  };
+};
+
+export type AbiturientInfoResponse = {
+  isCache: any;
+  info: IncomingsPageInfo;
+  originalInfo: IncomingsPageOriginalInfo;
+  item: AbiturientInfo;
+  filename: string;
+  payload: {
+    afterGreens: number;
+    beforeGreens: number;
+    totalItems: number;
   };
 };

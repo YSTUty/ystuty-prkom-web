@@ -63,7 +63,7 @@ const WrapAbiturFieldType = (val: any, key: keyof AbiturientInfo) => {
   }
 };
 
-const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles: string[] }> = (props) => {
+const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[] }> = (props) => {
   const { list, titles } = props;
   const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
   const theme = useTheme();

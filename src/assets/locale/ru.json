@@ -23,6 +23,8 @@
   "page.abiturient.list.table.header.priorityHight": "Высший приоритет",
   "page.abiturient.list.table.header.scoreSubjects": "Баллы по предметам",
   "page.abiturient.list.table.header.scoreExam": "Вступительное испытание",
+  "page.user.userUid.info": "Информация по уникальному коду",
+  "page.user.emptyData": "Информации по указанному Уникальному коду не было найдено",
   "component.telegramButton.title": "Начать отслеживание изменений в Telegram боте для этого заявления",
   "AbiturientInfoStateType.Unknown": "Неизвестно",
   "AbiturientInfoStateType.Submitted": "Подано",

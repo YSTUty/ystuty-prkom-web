@@ -19,6 +19,7 @@ import ViewApplicationsContainer from './ViewApplications.container';
 
 import VersionComponent from '../components/Version.component';
 import UserUidField from '../components/UserUidField.component';
+import ViewUserApplicationsContainer from './ViewUserApplications.container';
 
 const Copyright = () => {
   return (
@@ -76,6 +77,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<MainPageContainer />} />
           <Route path="/view/:fileName" element={<ViewApplicationsContainer />} />
+          <Route path="/user/:userUid" element={<ViewUserApplicationsContainer />} />
           {/* <Route path="about" element={<About />} /> */}
         </Routes>
         <Copyright />
