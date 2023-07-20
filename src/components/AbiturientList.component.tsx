@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import { styled, useTheme } from '@mui/material/styles';
@@ -63,21 +64,36 @@ const WrapAbiturFieldType = (val: any, key: keyof AbiturientInfo) => {
   }
 };
 
-const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[] }> = (props) => {
-  const { list, titles } = props;
+const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPersonal?: boolean }> = (props) => {
+  const { list, titles, isPersonal } = props;
   const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [alreadyScrolled, setAlreadyScrolled] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
   const userUidRowRef = React.useRef<HTMLTableRowElement>(null);
 
-  const scrollToRow = () => {
-    const ref = userUidRowRef.current;
-    if (ref) {
-      ref.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const isUserUid = React.useCallback(
+    (uid: string) => {
+      const numUserUid = userUid.replace(/[^0-9]+/g, '');
+      return !!userUid && uid.replace(/[^0-9]+/g, '').includes(numUserUid);
+    },
+    [userUid],
+  );
+
+  const scrollToRow = React.useCallback(() => {
+    const { current } = userUidRowRef;
+    if (current) {
+      current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  };
+  }, [userUidRowRef]);
+
+  const handleRowClick = React.useCallback(
+    (e: React.MouseEvent<unknown>, userUid: string) => {
+      navigate(`/user/${userUid}`);
+    },
+    [navigate],
+  );
 
   React.useEffect(() => {
     if (alreadyScrolled || list.length === 0) {
@@ -85,32 +101,12 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[] }> = 
     }
     const interval = setTimeout(scrollToRow, 900);
     setAlreadyScrolled(true);
-    return () => clearInterval(interval);
-  }, [list, scrollToRow, alreadyScrolled, setAlreadyScrolled]);
+    return () => void alreadyScrolled && clearInterval(interval);
+  }, [list, scrollToRow, setAlreadyScrolled]);
 
   if (list.length === 0) {
     return null;
   }
-
-  const handleClick = (e: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-
-    setSelected(newSelected);
-  };
-  const isSelected = (name: string) => selected.includes(name);
-  const numUserUid = userUid.replace(/[^0-9]+/g, '');
-  const isUserUid = (uid: string) => userUid && uid.replace(/[^0-9]+/g, '').includes(numUserUid);
 
   let firstItem = list[0];
   let header = Object.keys(firstItem) as (keyof AbiturientInfo)[];
@@ -123,7 +119,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[] }> = 
       <Table stickyHeader sx={{ minWidth: 650 }} size="small" aria-label="Abiturient list">
         <TableHead>
           <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-            <StyledTableCell rowSpan={2}>Bot</StyledTableCell>
+            {!isPersonal && <StyledTableCell rowSpan={2}>Bot</StyledTableCell>}
             {/* <StyledTableCell>#</StyledTableCell>
             <StyledTableCell>UID</StyledTableCell> */}
 
@@ -159,26 +155,27 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[] }> = 
 
         <TableBody>
           {list.map((row) => {
-            const isItemSelected = isSelected(row.uid);
             const isItemUserUid = isUserUid(row.uid);
 
             return (
               <StyledTableRow
                 key={row.uid}
                 ref={isItemUserUid && !userUidRowRef.current ? userUidRowRef : null}
-                hover
-                onClick={(event) => handleClick(event, row.uid)}
+                hover={!isPersonal}
+                onClick={(event) => !isPersonal && handleRowClick(event, row.uid)}
                 role="checkbox"
-                aria-checked={isItemSelected}
-                selected={isItemSelected}
+                aria-checked={isItemUserUid}
+                selected={isItemUserUid}
                 sx={{
                   '&:last-child td, &:last-child th': { border: 0 },
                   cursor: 'pointer',
                 }}
               >
-                <StyledTableCell rowSpan={1} colSpan={1}>
-                  <TelegramButton uid={row.uid} />
-                </StyledTableCell>
+                {!isPersonal && (
+                  <StyledTableCell rowSpan={1} colSpan={1}>
+                    <TelegramButton uid={row.uid} />
+                  </StyledTableCell>
+                )}
                 {/* <StyledTableCell component="th" scope="row">
                   {row.position}
                 </StyledTableCell>
@@ -226,6 +223,9 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[] }> = 
                             : null,
                         ...(e === 'uid' && {
                           minWidth: 140,
+                        }),
+                        ...(e === 'position' && {
+                          fontWeight: isPersonal ? 'bold' : null,
                         }),
                       }}
                       align="center"

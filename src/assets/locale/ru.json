@@ -25,6 +25,8 @@
   "page.abiturient.list.table.header.scoreExam": "Вступительное испытание",
   "page.user.userUid.info": "Информация по уникальному коду",
   "page.user.emptyData": "Информации по указанному Уникальному коду не было найдено",
+  "page.user.userUid.appCount": "Найдено {count, plural, one {# заявление} few {# заявления} other {# заявлений}}",
+  "page.user.list.viewFull": "Посмотреть в таблице",
   "component.telegramButton.title": "Начать отслеживание изменений в Telegram боте для этого заявления",
   "AbiturientInfoStateType.Unknown": "Неизвестно",
   "AbiturientInfoStateType.Submitted": "Подано",

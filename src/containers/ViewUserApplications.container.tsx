@@ -19,6 +19,7 @@ import * as otherUtils from '../utils/other.util';
 import { AbiturientInfoResponse } from '../interfaces/prkom.interface';
 
 import AbiturientList from '../components/AbiturientList.component';
+import TelegramButton from '../components/TelegramButton.component';
 
 const ViewUserApplications = () => {
   const { userUid: userUid_ } = useParams();
@@ -98,6 +99,7 @@ const ViewUserApplications = () => {
   // * Formatting uid
   React.useEffect(() => {
     if (!uidNumber) {
+      setErrorMsg(`Wrong UID`);
       return;
     }
 
@@ -163,6 +165,10 @@ const ViewUserApplications = () => {
           <Typography color={(theme) => theme.palette.secondary.main} component="span">
             {formatedUid}
           </Typography>
+          <TelegramButton uid={formatedUid} />
+        </Typography>
+        <Typography align="center">
+          <FormattedMessage id="page.user.userUid.appCount" values={{ count: listData.length }} />
         </Typography>
       </Paper>
 
@@ -190,9 +196,14 @@ const ViewUserApplications = () => {
                   <Typography>{response.originalInfo.numbersInfo}</Typography>
                 </>
               )}
+
+              <Divider sx={{ my: 1 }} />
+              <Button component={Link} to={`/view/${response.filename}`}>
+                <FormattedMessage id="page.user.list.viewFull" />
+              </Button>
             </Paper>
           </Container>
-          <AbiturientList list={[response.item]} />
+          <AbiturientList list={[response.item]} isPersonal />
         </Paper>
       ))}
     </Box>
