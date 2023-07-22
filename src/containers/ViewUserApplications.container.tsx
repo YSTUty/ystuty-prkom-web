@@ -140,7 +140,9 @@ const ViewUserApplications = () => {
             </Paper>
           ) : fetching ? (
             <>
-              <Typography>Loading...</Typography>
+              <Typography>
+                <FormattedMessage id="badges.loading" />
+              </Typography>
               <LinearProgress color="secondary" />
             </>
           ) : (

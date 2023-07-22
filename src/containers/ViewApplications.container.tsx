@@ -116,7 +116,9 @@ const ViewApplications = () => {
             </Paper>
           ) : (
             <>
-              <Typography>Loading...</Typography>
+              <Typography>
+                <FormattedMessage id="badges.loading" />
+              </Typography>
               <LinearProgress color="secondary" />
             </>
           )}

@@ -110,7 +110,9 @@ const MainPage = () => {
           </Paper>
         ) : listData.length === 0 ? (
           <>
-            <Typography>Loading...</Typography>
+            <Typography>
+              <FormattedMessage id="badges.loading" />
+            </Typography>
             <LinearProgress color="secondary" />
           </>
         ) : (
