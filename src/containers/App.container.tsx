@@ -6,6 +6,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -18,10 +19,11 @@ import * as envUtils from '../utils/env.utils';
 import { ThemeModeButton } from '../providers/ThemeMode.provider';
 import MainPageContainer from './MainPage.container';
 import ViewApplicationsContainer from './ViewApplications.container';
+import ViewUserApplicationsContainer from './ViewUserApplications.container';
 
 import VersionComponent from '../components/Version.component';
 import UserUidField from '../components/UserUidField.component';
-import ViewUserApplicationsContainer from './ViewUserApplications.container';
+import ScrollToTop from '../components/ScrollToTop.component';
 
 const Copyright = () => {
   return (
@@ -67,7 +69,7 @@ const App = () => {
             variant="h6"
             color="inherit"
             noWrap
-            sx={(theme) => ({ mr: { xs: 1, sm: 2 }, fontSize: { xs: 16, sm: theme.typography.h6.fontSize } })}
+            sx={(theme) => ({ mr: { xs: 1, sm: 2 }, fontSize: { xs: 14, sm: theme.typography.h6.fontSize } })}
           >
             {!isSmallScreen ? (
               <>
@@ -89,6 +91,7 @@ const App = () => {
           </FormControl>
         </Toolbar>
       </AppBar>
+      <Box id="back-to-top-anchor" />
       <Container component="main" maxWidth={false} sx={{ mb: 4, px: { xs: 1, sm: 3 } }}>
         <Routes>
           <Route path="/" element={<MainPageContainer />} />
@@ -98,6 +101,7 @@ const App = () => {
         </Routes>
         <Copyright />
       </Container>
+      <ScrollToTop />
     </>
   );
 };
