@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
+import YstuPrkomIcon from '@mui/icons-material/RemoveRedEye';
 
 import * as envUtils from '../utils/env.utils';
 import { AbiturientCachedInfo } from '../interfaces/prkom.interface';
@@ -143,12 +144,36 @@ const ViewApplications = () => {
           {fetchedTime && (
             <FormattedDate value={fetchedTime} day="2-digit" hour="2-digit" minute="2-digit" second="2-digit" />
           )}
+          {isCached && (
+            <Typography component={'span'} fontSize={9}>
+              cache
+            </Typography>
+          )}
         </Typography>
 
         <Paper sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
-          <Typography component="h1" variant="h6" align="center" pb={3}>
-            <FormattedMessage id="page.abiturient.list.competitionGroupName" />: {response.info.competitionGroupName}
+          <Typography component="h1" variant="h6" align="center">
+            <FormattedMessage id="page.abiturient.list.competitionGroupName" />:{' '}
+            <Typography component="span" variant="h6" color="secondary">
+              {response.info.competitionGroupName}
+            </Typography>
           </Typography>
+          {envUtils.linkToYstuPrkom && (
+            <Typography align="center" pb={2}>
+              <Button
+                component="a"
+                href={`${envUtils.linkToYstuPrkom}${fileName}`}
+                size="small"
+                // variant="outlined"
+                color="primary"
+                sx={{ pr: 1, fontSize: 10 }}
+                title={formatMessage({ id: 'common.button.viewOriginalList' })}
+                endIcon={<YstuPrkomIcon />}
+              >
+                <FormattedMessage id="common.button.originalList" />
+              </Button>
+            </Typography>
+          )}
 
           {response.originalInfo && (
             <>

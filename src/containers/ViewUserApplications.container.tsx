@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
 import store2 from 'store2';
 
 import Box from '@mui/material/Box';
@@ -14,6 +15,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 
+import appSlice from '../store/reducer/app.slice';
 import * as envUtils from '../utils/env.utils';
 import * as otherUtils from '../utils/other.util';
 import { AbiturientInfoResponse } from '../interfaces/prkom.interface';
@@ -23,6 +25,7 @@ import TelegramButton from '../components/TelegramButton.component';
 
 const ViewUserApplications = () => {
   const { userUid: userUid_ } = useParams();
+  const dispatch = useDispatch();
   const { formatMessage } = useIntl();
   const userUid = userUid_?.replace(/_/, ' ') || '';
   const uidNumber = userUid.replace(/[^0-9]+/g, '');
@@ -96,6 +99,10 @@ const ViewUserApplications = () => {
     [fetching, setFetching, applyListData, setErrorMsg],
   );
 
+  const setUserUid = React.useCallback(() => {
+    dispatch(appSlice.actions.setUserUid(formatedUid || ''));
+  }, [formatedUid]);
+
   // * Formatting uid
   React.useEffect(() => {
     if (!uidNumber) {
@@ -164,9 +171,9 @@ const ViewUserApplications = () => {
       <Paper sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
         <Typography component="h1" variant="h6" align="center">
           <FormattedMessage id="page.user.userUid.info" />:{' '}
-          <Typography color={(theme) => theme.palette.secondary.main} component="span">
+          <Button sx={(theme) => ({ color: theme.palette.secondary.main })} component="span" onClick={setUserUid}>
             {formatedUid}
-          </Typography>
+          </Button>
           <TelegramButton uid={formatedUid} />
         </Typography>
         <Typography align="center">

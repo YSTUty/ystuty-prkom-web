@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -15,6 +16,7 @@ import Divider from '@mui/material/Divider';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
+import YstuPrkomIcon from '@mui/icons-material/List';
 
 import * as envUtils from '../utils/env.utils';
 
@@ -53,6 +55,7 @@ const Copyright = () => {
 
 const App = () => {
   const theme = useTheme();
+  const { formatMessage } = useIntl();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const scrollTrigger = useScrollTrigger({ target: window });
 
@@ -67,12 +70,16 @@ const App = () => {
             borderBottom: (t) => `1px solid ${t.palette.divider}`,
           }}
         >
-          <Toolbar variant="dense">
+          <Toolbar variant="dense" sx={{ px: { xs: 1, sm: 3 } }}>
             <Typography
               variant="h6"
               color="inherit"
               noWrap
-              sx={(theme) => ({ mr: { xs: 1, sm: 2 }, fontSize: { xs: 14, sm: theme.typography.h6.fontSize } })}
+              sx={(theme) => ({
+                mr: { xs: 1, sm: 2 },
+                fontSize: { xs: 14, sm: theme.typography.h6.fontSize },
+                minWidth: 95,
+              })}
             >
               {!isSmallScreen ? (
                 <>
@@ -89,7 +96,21 @@ const App = () => {
             <Typography sx={{ flex: 1 }}></Typography>
             <Divider orientation="vertical" flexItem />
 
-            <FormControl sx={{ pl: 1 }}>
+            {envUtils.linkToYstuPrkom && (
+              <FormControl sx={{ px: 0.5 }}>
+                <IconButton
+                  size="small"
+                  component="a"
+                  color="secondary"
+                  href={envUtils.linkToYstuPrkom}
+                  title={formatMessage({ id: 'common.button.viewOriginalList' })}
+                >
+                  <YstuPrkomIcon />
+                </IconButton>
+              </FormControl>
+            )}
+            <Divider orientation="vertical" flexItem />
+            <FormControl size="small" sx={{ pl: 1 }}>
               <ThemeModeButton />
             </FormControl>
           </Toolbar>
