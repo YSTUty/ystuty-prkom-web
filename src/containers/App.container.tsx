@@ -6,11 +6,13 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
+import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import Divider from '@mui/material/Divider';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 
@@ -52,45 +54,47 @@ const Copyright = () => {
 const App = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const scrollTrigger = useScrollTrigger({ target: window });
 
   return (
     <>
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={4}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <Typography
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={(theme) => ({ mr: { xs: 1, sm: 2 }, fontSize: { xs: 14, sm: theme.typography.h6.fontSize } })}
-          >
-            {!isSmallScreen ? (
-              <>
-                [YSTUty] <FormattedMessage id="page.main.title" />
-              </>
-            ) : (
-              <FormattedMessage id="page.main.title.short" />
-            )}
-          </Typography>
-          <Divider orientation="vertical" flexItem />
+      <Slide appear={false} direction="down" in={!scrollTrigger}>
+        <AppBar
+          position="sticky"
+          color="default"
+          elevation={4}
+          sx={{
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          }}
+        >
+          <Toolbar variant="dense">
+            <Typography
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={(theme) => ({ mr: { xs: 1, sm: 2 }, fontSize: { xs: 14, sm: theme.typography.h6.fontSize } })}
+            >
+              {!isSmallScreen ? (
+                <>
+                  [YSTUty] <FormattedMessage id="page.main.title" />
+                </>
+              ) : (
+                <FormattedMessage id="page.main.title.short" />
+              )}
+            </Typography>
+            <Divider orientation="vertical" flexItem />
 
-          <UserUidField />
+            <UserUidField />
 
-          <Typography sx={{ flex: 1 }}></Typography>
-          <Divider orientation="vertical" flexItem />
+            <Typography sx={{ flex: 1 }}></Typography>
+            <Divider orientation="vertical" flexItem />
 
-          <FormControl sx={{ pl: 1 }}>
-            <ThemeModeButton />
-          </FormControl>
-        </Toolbar>
-      </AppBar>
+            <FormControl sx={{ pl: 1 }}>
+              <ThemeModeButton />
+            </FormControl>
+          </Toolbar>
+        </AppBar>
+      </Slide>
       <Box id="back-to-top-anchor" />
       <Container component="main" maxWidth={false} sx={{ mb: 4, px: { xs: 1, sm: 3 } }}>
         <Routes>
