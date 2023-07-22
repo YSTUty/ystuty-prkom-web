@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { useDebounce } from 'react-use';
 
-import Paper from '@mui/material/Paper';
+import { styled, alpha } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 
@@ -14,6 +14,30 @@ import { RootState } from '../store';
 import appSlice from '../store/reducer/app.slice';
 import * as otherUtils from '../utils/other.util';
 
+const Search = styled('form')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: theme.spacing(1),
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(2),
+  },
+  maxWidth: 165,
+}));
+
+const StyledInput = styled(TextField)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, `calc(1em + ${theme.spacing(2.4)})`),
+    transition: theme.transitions.create('width'),
+    width: '100%',
+  },
+}));
+
 const UserUidField = () => {
   const dispatch = useDispatch();
   const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
@@ -22,10 +46,16 @@ const UserUidField = () => {
 
   const [value, setValue] = React.useState<string>(userUid);
   const [formatedUid, setFormatedUid] = React.useState<string>();
+  const [helperText, setHelperText] = React.useState<string>();
 
   const onChangeValue = React.useCallback(
     (value: string) => {
-      setValue(value);
+      setValue(
+        value
+          .replace(/^\s/g, '')
+          .replace(/[^0-9\-\s]+/g, '')
+          .replace(/\s\s+/g, ' '),
+      );
     },
     [setValue],
   );
@@ -41,16 +71,19 @@ const UserUidField = () => {
   const handleSearchClick = React.useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
-      if (!formatedUid) return;
+      if (!!helperText) {
+        return;
+      }
       navigate(`/user/${formatedUid}`);
     },
-    [formatedUid],
+    [formatedUid, helperText],
   );
 
   // * Formatting uid
   React.useEffect(() => {
     const uidNumber = userUid.replace(/[^0-9]+/g, '').trim();
     if (!uidNumber) {
+      setHelperText(undefined);
       setFormatedUid('');
       return;
     }
@@ -59,35 +92,49 @@ const UserUidField = () => {
     if (uidNumber.startsWith('000') || (!userUid.includes('-') && uidNumber.length > 3 && uidNumber.length < 10)) {
       formatedUid = otherUtils.convertToNumericUid(uidNumber);
     } else if (!uidNumber.startsWith('0000') && uidNumber.length > 10) {
+      let num = Number(uidNumber);
       try {
-        otherUtils.validateSnils(uidNumber);
-        formatedUid = otherUtils.convertToSnilsUid(uidNumber);
+        otherUtils.validateSnils(num);
+        formatedUid = otherUtils.convertToSnilsUid(num);
       } catch (err) {
+        setHelperText((err as Error).message);
         return;
       }
     }
+
+    setHelperText(undefined);
     setFormatedUid(formatedUid);
-  }, [userUid, setFormatedUid]);
+    if (formatedUid) {
+      setValue(formatedUid);
+    }
+  }, [userUid, setFormatedUid, setValue]);
 
   return (
-    <Paper
-      component="form"
-      sx={{ ml: 1, display: 'flex', alignItems: 'center', maxWidth: 220 }}
-      onSubmit={handleSearchClick}
-    >
-      <TextField
-        size="small"
-        sx={{ flex: 1 }}
+    <Search onSubmit={handleSearchClick}>
+      <IconButton
+        type="button"
+        sx={(theme) => ({
+          position: 'absolute',
+          zIndex: 10,
+          backgroundColor: alpha(theme.palette.common.white, 0.1),
+          m: 0.5,
+          p: 0.5,
+        })}
+        aria-label="search"
+        onClick={handleSearchClick}
+        disabled={!!helperText}
+      >
+        <SearchIcon />
+      </IconButton>
+      <StyledInput
         value={value}
         onChange={(e) => onChangeValue(e.target.value)}
         placeholder={formatMessage({ id: 'page.main.header.field.uid' })}
+        inputProps={{ 'aria-label': 'search' }}
+        error={!!helperText}
+        helperText={helperText}
       />
-      {formatedUid && (
-        <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearchClick}>
-          <SearchIcon />
-        </IconButton>
-      )}
-    </Paper>
+    </Search>
   );
 };
 
