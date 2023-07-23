@@ -9058,6 +9058,11 @@ react-use@^17.4.0:
     ts-easing "^0.2.0"
     tslib "^2.1.0"
 
+react-virtuoso@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.4.1.tgz#43d7ac35346c4eba947b40858b375d5844b5ae9f"
+  integrity sha512-QrZ0JLnZFH8ltMw6q+S7U1+V2vUcSHzoIfLRzQKSv4nMJhEdjiZ+e9PqWCI7xJiy2AmSCAgo7g1V5osuurJo2Q==
+
 react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
