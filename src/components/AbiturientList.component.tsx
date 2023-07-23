@@ -16,7 +16,10 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { RootState } from '../store';
 import { AbiturientInfo, AbiturientInfoStateType, AbiturientInfo_Bachelor } from '../interfaces/prkom.interface';
+import * as egeScoresUtil from '../utils/ege-scores.util';
+
 import TelegramButton from './TelegramButton.component';
+import WrapAbiturFieldType from './WrapAbiturFieldType.component';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -184,25 +187,31 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                 {headerFiltered.map((e) =>
                   (e as string) === 'scoreSubjects' ? (
                     hasSubjects &&
-                    (row as AbiturientInfo_Bachelor).scoreSubjects.map(([score, title]) => (
-                      <StyledTableCell
-                        key={title}
-                        // rowSpan={1}
-                        // colSpan={1}
-                        sx={{
-                          backgroundColor: row.isGreen
-                            ? theme.palette.success.main
-                            : row.isRed
-                            ? score === null
-                              ? theme.palette.warning.main
-                              : null
-                            : null,
-                        }}
-                        align="center"
-                      >
-                        {score}
-                      </StyledTableCell>
-                    ))
+                    (row as AbiturientInfo_Bachelor).scoreSubjects.map(([score, title]) => {
+                      const minScore = row.isRed
+                        ? egeScoresUtil.getMaxSubjectMinScore(title, undefined, row.uid)
+                        : null;
+                      return (
+                        <StyledTableCell
+                          key={title}
+                          // rowSpan={1}
+                          // colSpan={1}
+                          sx={{
+                            backgroundColor: row.isGreen
+                              ? theme.palette.success.main
+                              : row.isRed
+                              ? score === null || (minScore && score < minScore)
+                                ? theme.palette.warning.main
+                                : null
+                              : null,
+                          }}
+                          align="center"
+                        >
+                          {score}
+                          {score && minScore && score < minScore ? `/${minScore}` : null}
+                        </StyledTableCell>
+                      );
+                    })
                   ) : (
                     <StyledTableCell
                       key={e}
@@ -217,7 +226,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                               ? theme.palette.success.main
                               : null
                             : row.isRed
-                            ? row[e] === null || e === 'uid' || e === 'position'
+                            ? (row[e] === null || e === 'uid' || e === 'position') && e !== 'priorityHight'
                               ? theme.palette.warning.main
                               : null
                             : null,
