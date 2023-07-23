@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.0...v0.3.1) (2023-07-23)
+
+
+### 🧹 Chore
+
+* **container:** add link button to original table in main page ([e4c1fa1](https://github.com/YSTUty/ystuty-prkom-web/commit/e4c1fa1449428ca69573498c26f7fed6fe612348))
+* **container:** auto set uid if empty from store or query on `user` page ([07a54a6](https://github.com/YSTUty/ystuty-prkom-web/commit/07a54a63a5bd29338d690cdfaedfb8c7fa8b542a))
+* remove `fullWidth` of button ([9d01643](https://github.com/YSTUty/ystuty-prkom-web/commit/9d0164376a32bc10b2fe248956d75accb2ee5834))
+* update style for mobile ([bc442a1](https://github.com/YSTUty/ystuty-prkom-web/commit/bc442a134eec4ce1ffb015a766eec2e1e59e8d35))
+
 ## [0.3.0](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.2.0...v0.3.0) (2023-07-23)
 
 
