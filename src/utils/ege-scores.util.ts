@@ -62,6 +62,8 @@ export const findSubjectType = (subjectName: string) => {
     type = SubjectType.Mathematics_ProfileLevel;
   } else if (inclues('информатика') && inclues(' ИКТ')) {
     type = SubjectType.ComputerScience_ICT;
+  } else if (check('Обществознание')) {
+    type = SubjectType.SocialStudies;
   } else if (check('Физика')) {
     type = SubjectType.Physics;
   } else if (check('Литература')) {
@@ -70,7 +72,7 @@ export const findSubjectType = (subjectName: string) => {
     type = SubjectType.History;
   } else if (check('Химия')) {
     type = SubjectType.Chemistry;
-  } else if (check('Иностранный язык')) {
+  } else if (check('Иностранный язык') || check('Английский язык') || check('Немецкий язык')) {
     type = SubjectType.ForeignLanguage;
   } else if (check('Биология')) {
     type = SubjectType.Biology;
