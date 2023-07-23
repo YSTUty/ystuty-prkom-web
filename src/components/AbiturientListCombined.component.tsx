@@ -83,7 +83,6 @@ const ApplicationTableRow: React.FC<{ response: AbiturientInfoResponse; hasBefor
         {hasBeforeGreens && <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>}
         <StyledTableCell>
           <Button
-            fullWidth
             component={Link}
             to={`/view/${response.filename}`}
             variant="outlined"
