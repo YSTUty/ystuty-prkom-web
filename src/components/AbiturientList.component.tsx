@@ -12,10 +12,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import CheckIcon from '@mui/icons-material/Check';
-
 import { RootState } from '../store';
-import { AbiturientInfo, AbiturientInfoStateType, AbiturientInfo_Bachelor } from '../interfaces/prkom.interface';
+import { AbiturientInfo, AbiturientInfo_Bachelor } from '../interfaces/prkom.interface';
 import * as egeScoresUtil from '../utils/ege-scores.util';
 
 import TelegramButton from './TelegramButton.component';
@@ -40,32 +38,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
-const WrapAbiturFieldType = (val: any, key: keyof AbiturientInfo) => {
-  switch (key) {
-    // * Number or null
-    case 'position':
-    case 'totalScore':
-    case 'scoreSubjectsSum':
-    case 'scoreCompetitive':
-    case 'priority':
-    case 'priorityHight':
-      return val;
-    // * Bool
-    case 'preemptiveRight':
-    case 'originalInUniversity':
-    case 'originalFromEGPU':
-      return val ? <CheckIcon color="success" /> : null;
-    // * Enum
-    case 'state':
-      return <FormattedMessage id={`AbiturientInfoStateType.${AbiturientInfoStateType[val]}`} />;
-    // * Strings
-    case 'uid':
-      return val.replace(/ /g, '\u00a0');
-    default:
-      return val;
-  }
-};
 
 const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPersonal?: boolean }> = (props) => {
   const { list, titles, isPersonal } = props;
@@ -239,7 +211,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                       }}
                       align="center"
                     >
-                      {WrapAbiturFieldType(row[e], e)}
+                      <WrapAbiturFieldType item={row} key_={e} />
                     </StyledTableCell>
                   ),
                 )}

@@ -22,6 +22,7 @@ import { AbiturientInfoResponse } from '../interfaces/prkom.interface';
 
 import AbiturientList from '../components/AbiturientList.component';
 import TelegramButton from '../components/TelegramButton.component';
+import AbiturientListCombined from '../components/AbiturientListCombined.component';
 
 const ViewUserApplications = () => {
   const { userUid: userUid_ } = useParams();
@@ -174,47 +175,60 @@ const ViewUserApplications = () => {
           <Button sx={(theme) => ({ color: theme.palette.secondary.main })} component="span" onClick={setUserUid}>
             {formatedUid}
           </Button>
-          <TelegramButton uid={formatedUid} />
+        </Typography>
+        <Typography align="center" py={1}>
+          <TelegramButton uid={formatedUid} showText variant="contained" />
         </Typography>
         <Typography align="center">
           <FormattedMessage id="page.user.userUid.appCount" values={{ count: listData.length }} />
+          {isCached && (
+            <Typography component={'span'} fontSize={9} sx={{ px: 1 }}>
+              cache
+            </Typography>
+          )}
         </Typography>
       </Paper>
 
-      {listData.map((response) => (
-        <Paper key={response.filename} sx={{ mt: 3, p: 1 }}>
-          <Container component="main" sx={{ mt: 2 }}>
-            <Paper elevation={2} sx={{ my: 2, p: { xs: 2, md: 3 } }}>
-              <Typography component="h1" variant="h6" align="center" pb={3}>
-                <FormattedMessage id="page.abiturient.list.competitionGroupName" />:{' '}
-                {response.info.competitionGroupName}
-              </Typography>
-
-              {response.originalInfo && (
-                <>
-                  <Typography>{response.originalInfo.buildDate}</Typography>
-                  <Typography>{response.originalInfo.prkomDate}</Typography>
-                  <Divider sx={{ my: 1 }} />
-                  <Typography>{response.originalInfo.competitionGroupName}</Typography>
-                  <Typography>{response.originalInfo.formTraining}</Typography>
-                  <Typography>{response.originalInfo.levelTraining}</Typography>
-                  <Typography>{response.originalInfo.directionTraining}</Typography>
-                  <Typography>{response.originalInfo.basisAdmission}</Typography>
-                  <Typography>{response.originalInfo.sourceFunding}</Typography>
-                  <Divider sx={{ my: 1 }} />
-                  <Typography>{response.originalInfo.numbersInfo}</Typography>
-                </>
-              )}
-
-              <Divider sx={{ my: 1 }} />
-              <Button component={Link} to={`/view/${response.filename}`}>
-                <FormattedMessage id="page.user.list.viewFull" />
-              </Button>
-            </Paper>
-          </Container>
-          <AbiturientList list={[response.item]} isPersonal />
+      {listData.length > 1 ? (
+        <Paper sx={{ mt: 3, p: 1 }}>
+          <AbiturientListCombined listData={listData} />
         </Paper>
-      ))}
+      ) : (
+        listData.map((response) => (
+          <Paper key={response.filename} sx={{ mt: 3, p: 1 }}>
+            <Container component="main" sx={{ mt: 2 }}>
+              <Paper elevation={2} sx={{ my: 2, p: { xs: 2, md: 3 } }}>
+                <Typography component="h1" variant="h6" align="center" pb={3}>
+                  <FormattedMessage id="page.abiturient.list.competitionGroupName" />:{' '}
+                  {response.info.competitionGroupName}
+                </Typography>
+
+                {response.originalInfo && (
+                  <>
+                    <Typography>{response.originalInfo.buildDate}</Typography>
+                    <Typography>{response.originalInfo.prkomDate}</Typography>
+                    <Divider sx={{ my: 1 }} />
+                    <Typography>{response.originalInfo.competitionGroupName}</Typography>
+                    <Typography>{response.originalInfo.formTraining}</Typography>
+                    <Typography>{response.originalInfo.levelTraining}</Typography>
+                    <Typography>{response.originalInfo.directionTraining}</Typography>
+                    <Typography>{response.originalInfo.basisAdmission}</Typography>
+                    <Typography>{response.originalInfo.sourceFunding}</Typography>
+                    <Divider sx={{ my: 1 }} />
+                    <Typography>{response.originalInfo.numbersInfo}</Typography>
+                  </>
+                )}
+
+                <Divider sx={{ my: 1 }} />
+                <Button component={Link} to={`/view/${response.filename}`}>
+                  <FormattedMessage id="page.user.list.viewFull" />
+                </Button>
+              </Paper>
+            </Container>
+            <AbiturientList list={[response.item]} isPersonal />
+          </Paper>
+        ))
+      )}
     </Box>
   );
 };
