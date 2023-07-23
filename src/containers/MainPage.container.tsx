@@ -4,10 +4,13 @@ import store2 from 'store2';
 
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
 import RefreshIcon from '@mui/icons-material/Refresh';
+
+import YstuPrkomIcon from '@mui/icons-material/List';
 
 import * as envUtils from '../utils/env.utils';
 import { IncomingsLink } from '../interfaces/prkom.interface';
@@ -99,6 +102,20 @@ const MainPage = () => {
               cache
             </Typography>
           )}
+        </Typography>
+
+        <Typography align="center" py={1}>
+          <Button
+            component="a"
+            href={envUtils.linkToYstuPrkom}
+            size="small"
+            color="inherit"
+            sx={{ fontSize: 11 }}
+            title={formatMessage({ id: 'common.button.viewOriginalList' })}
+            endIcon={<YstuPrkomIcon />}
+          >
+            <FormattedMessage id="common.button.originalList" />
+          </Button>
         </Typography>
 
         {errorMsg ? (
