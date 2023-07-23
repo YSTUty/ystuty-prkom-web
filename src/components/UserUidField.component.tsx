@@ -16,23 +16,19 @@ import * as otherUtils from '../utils/other.util';
 
 const Search = styled('form')(({ theme }) => ({
   position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
   marginRight: theme.spacing(2),
   marginLeft: theme.spacing(1),
+  maxWidth: 175,
   [theme.breakpoints.up('sm')]: {
+    maxWidth: 200,
     marginLeft: theme.spacing(2),
   },
-  maxWidth: 165,
 }));
 
 const StyledInput = styled(TextField)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, `calc(1em + ${theme.spacing(2.4)})`),
+    padding: theme.spacing(1, 1, 1, `calc(1em + ${theme.spacing(2.5)})`),
     transition: theme.transitions.create('width'),
     width: '100%',
   },
@@ -116,7 +112,6 @@ const UserUidField = () => {
         sx={(theme) => ({
           position: 'absolute',
           zIndex: 10,
-          backgroundColor: alpha(theme.palette.common.white, 0.1),
           m: 0.5,
           p: 0.5,
         })}

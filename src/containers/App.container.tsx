@@ -96,7 +96,7 @@ const App = () => {
             <Typography sx={{ flex: 1 }}></Typography>
             <Divider orientation="vertical" flexItem />
 
-            {envUtils.linkToYstuPrkom && (
+            {envUtils.linkToYstuPrkom && !isSmallScreen && (
               <FormControl sx={{ px: 0.5 }}>
                 <IconButton
                   size="small"
