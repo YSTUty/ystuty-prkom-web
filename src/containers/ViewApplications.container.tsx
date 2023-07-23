@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import store2 from 'store2';
@@ -15,6 +16,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import YstuPrkomIcon from '@mui/icons-material/RemoveRedEye';
 
+import { RootState } from '../store';
 import * as envUtils from '../utils/env.utils';
 import { AbiturientCachedInfo } from '../interfaces/prkom.interface';
 
@@ -23,6 +25,8 @@ import AbiturientList from '../components/AbiturientList.component';
 const ViewApplications = () => {
   const { fileName } = useParams();
   const { formatMessage } = useIntl();
+  const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
+
   const STORE_CACHED_KEY = `ABIT_INFO_${fileName!.toUpperCase()}`;
 
   const [listData, setListData] = React.useState<AbiturientCachedInfo>();
@@ -162,7 +166,9 @@ const ViewApplications = () => {
             <Typography align="center" pb={2}>
               <Button
                 component="a"
-                href={`${envUtils.linkToYstuPrkom}${fileName}`}
+                href={`${envUtils.linkToYstuPrkom}${fileName}${
+                  userUid ? `#:~:text=${encodeURIComponent(userUid.split('-').pop()!)}` : ''
+                }`}
                 size="small"
                 // variant="outlined"
                 color="primary"
