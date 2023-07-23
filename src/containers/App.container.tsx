@@ -121,7 +121,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<MainPageContainer />} />
           <Route path="/view/:fileName" element={<ViewApplicationsContainer />} />
-          <Route path="/user/:userUid" element={<ViewUserApplicationsContainer />} />
+          <Route path="/user/:userUid?" element={<ViewUserApplicationsContainer />} />
           {/* <Route path="about" element={<About />} /> */}
         </Routes>
         <Copyright />

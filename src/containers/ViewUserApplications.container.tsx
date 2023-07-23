@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import store2 from 'store2';
 
 import Box from '@mui/material/Box';
@@ -19,6 +19,7 @@ import appSlice from '../store/reducer/app.slice';
 import * as envUtils from '../utils/env.utils';
 import * as otherUtils from '../utils/other.util';
 import { AbiturientInfoResponse } from '../interfaces/prkom.interface';
+import { RootState } from '../store';
 
 import AbiturientList from '../components/AbiturientList.component';
 import TelegramButton from '../components/TelegramButton.component';
@@ -28,6 +29,8 @@ const ViewUserApplications = () => {
   const { userUid: userUid_ } = useParams();
   const dispatch = useDispatch();
   const { formatMessage } = useIntl();
+  const navigate = useNavigate();
+  const { userUid: queryUserUid } = useSelector<RootState, RootState['app']>((state) => state.app);
   const userUid = userUid_?.replace(/_/, ' ') || '';
   const uidNumber = userUid.replace(/[^0-9]+/g, '');
 
@@ -107,6 +110,10 @@ const ViewUserApplications = () => {
   // * Formatting uid
   React.useEffect(() => {
     if (!uidNumber) {
+      if (queryUserUid) {
+        navigate(`/user/${queryUserUid}`);
+        return;
+      }
       setErrorMsg(`Wrong UID`);
       return;
     }
@@ -125,7 +132,7 @@ const ViewUserApplications = () => {
     }
 
     setFormatedUid(formatedUid);
-  }, [uidNumber, setErrorMsg]);
+  }, [queryUserUid, uidNumber, navigate, setErrorMsg]);
 
   React.useEffect(() => {
     fetchListData(formatedUid!);
