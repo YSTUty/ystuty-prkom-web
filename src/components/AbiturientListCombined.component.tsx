@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { styled } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
@@ -18,6 +18,7 @@ import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import YstuPrkomIcon from '@mui/icons-material/RemoveRedEye';
 
 import { AbiturientInfoResponse } from '../interfaces/prkom.interface';
 import WrapAbiturFieldType from './WrapAbiturFieldType.component';
@@ -48,6 +49,7 @@ const ApplicationTableRow: React.FC<{ response: AbiturientInfoResponse; hasBefor
     response: { info, item },
     hasBeforeGreens,
   } = props;
+  const { formatMessage } = useIntl();
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -80,7 +82,19 @@ const ApplicationTableRow: React.FC<{ response: AbiturientInfoResponse; hasBefor
         </StyledTableCell>
         {hasBeforeGreens && <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>}
         <StyledTableCell>
-          <WrapAbiturFieldType item={info} key_="competitionGroupName" />
+          <Button
+            fullWidth
+            component={Link}
+            to={`/view/${response.filename}`}
+            variant="outlined"
+            color="inherit"
+            endIcon={<YstuPrkomIcon />}
+            sx={{ textTransform: 'none' }}
+            // size="small"
+            title={formatMessage({ id: 'page.user.list.viewFull' })}
+          >
+            <WrapAbiturFieldType item={info} key_="competitionGroupName" />
+          </Button>
         </StyledTableCell>
         <StyledTableCell>
           <WrapAbiturFieldType item={info} key_="formTraining" />
@@ -146,7 +160,7 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
             </StyledTableCell>
             {hasBeforeGreens && (
               <StyledTableCell>
-                <FormattedMessage id="page.abiturient.list.table.header.competitionGroupName" />
+                <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
               </StyledTableCell>
             )}
             <StyledTableCell>
