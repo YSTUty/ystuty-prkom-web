@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import { useDebounce } from 'react-use';
 import { TableVirtuoso, TableComponents, VirtuosoHandle } from 'react-virtuoso';
 
 import { styled } from '@mui/material/styles';
@@ -96,26 +97,47 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
     [userUid],
   );
 
-  const scrollToRow = React.useCallback(() => {
-    if (tableHeaderRef.current) {
-      tableHeaderRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    setTimeout(() => {
-      if (virtuosoRef.current) {
-        const index = list.findIndex((e) => e.uid.startsWith(userUid) || e.uid === userUid);
-        virtuosoRef.current.scrollToIndex({ index, align: 'start', behavior: 'smooth' });
+  const scrollToRow = React.useCallback(
+    (toTable = true) => {
+      if (!userUid) {
+        return;
       }
-    }, 900);
-  }, [tableHeaderRef, virtuosoRef, userUid]);
+
+      if (toTable && tableHeaderRef.current) {
+        tableHeaderRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      setTimeout(
+        () => {
+          if (virtuosoRef.current) {
+            const index = list.findIndex((e) => e.uid.startsWith(userUid) || e.uid === userUid);
+            if (index !== -1) {
+              virtuosoRef.current.scrollToIndex({ index, align: 'start', behavior: 'smooth' });
+            }
+          }
+        },
+        toTable ? 900 : 0,
+      );
+    },
+    [tableHeaderRef, virtuosoRef, userUid],
+  );
+
+  useDebounce(
+    () => {
+      scrollToRow(false);
+    },
+    1e3,
+    [userUid],
+  );
 
   React.useEffect(() => {
-    if (alreadyScrolled || list.length === 0) {
+    if (isPersonal || alreadyScrolled || list.length === 0) {
       return;
     }
     const interval = setTimeout(scrollToRow, 900);
     setAlreadyScrolled(true);
     return () => void alreadyScrolled && clearInterval(interval);
-  }, [list, scrollToRow, setAlreadyScrolled]);
+  }, [list, isPersonal, scrollToRow, setAlreadyScrolled]);
 
   const rowContent = React.useCallback(
     (_index: number, row: AbiturientInfo) => {
