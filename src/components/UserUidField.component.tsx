@@ -6,6 +6,7 @@ import { useDebounce } from 'react-use';
 
 import { styled, alpha } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -16,9 +17,8 @@ import * as otherUtils from '../utils/other.util';
 
 const Search = styled('form')(({ theme }) => ({
   position: 'relative',
-  marginRight: theme.spacing(2),
-  marginLeft: theme.spacing(1),
-  maxWidth: 175,
+  margin: theme.spacing(1.25, 0, 1, 1),
+  maxWidth: 180,
   [theme.breakpoints.up('sm')]: {
     maxWidth: 200,
     marginLeft: theme.spacing(2),
@@ -26,11 +26,8 @@ const Search = styled('form')(({ theme }) => ({
 }));
 
 const StyledInput = styled(TextField)(({ theme }) => ({
-  color: 'inherit',
   '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, `calc(1em + ${theme.spacing(2.5)})`),
-    transition: theme.transitions.create('width'),
-    width: '100%',
+    padding: theme.spacing(1, 1, 1, 0),
   },
 }));
 
@@ -77,7 +74,8 @@ const UserUidField = () => {
 
   // * Formatting uid
   React.useEffect(() => {
-    const uidNumber = userUid.replace(/[^0-9]+/g, '').trim();
+    let _userUid = value || userUid;
+    const uidNumber = _userUid.replace(/[^0-9]+/g, '').trim();
     if (!uidNumber) {
       setHelperText(undefined);
       setFormatedUid('');
@@ -85,13 +83,19 @@ const UserUidField = () => {
     }
 
     let formatedUid = '';
-    if (uidNumber.startsWith('000') || (!userUid.includes('-') && uidNumber.length > 3 && uidNumber.length < 10)) {
+    if (uidNumber.startsWith('000') || (!_userUid.includes('-') && uidNumber.length > 3 && uidNumber.length < 10)) {
       formatedUid = otherUtils.convertToNumericUid(uidNumber);
+      // } else if (uidNumber.startsWith('00')) {
+      //   setValue(Number(uidNumber).toString());
+      //   return;
     } else if (!uidNumber.startsWith('0000') && uidNumber.length > 10) {
       let num = Number(uidNumber);
       try {
-        otherUtils.validateSnils(num);
         formatedUid = otherUtils.convertToSnilsUid(num);
+        if (formatedUid) {
+          setValue(formatedUid);
+        }
+        otherUtils.validateSnils(num);
       } catch (err) {
         setHelperText((err as Error).message);
         return;
@@ -107,24 +111,28 @@ const UserUidField = () => {
 
   return (
     <Search onSubmit={handleSearchClick}>
-      <IconButton
-        type="button"
-        sx={(theme) => ({
-          position: 'absolute',
-          zIndex: 10,
-          m: 0.5,
-          p: 0.5,
-        })}
-        aria-label="search"
-        onClick={handleSearchClick}
-        disabled={!!helperText}
-      >
-        <SearchIcon />
-      </IconButton>
       <StyledInput
         value={value}
         onChange={(e) => onChangeValue(e.target.value)}
-        placeholder={formatMessage({ id: 'page.main.header.field.uid' })}
+        label={formatMessage({ id: 'page.main.header.field.uid' })}
+        placeholder={Math.random() > 0.3 ? '123-456-789 01' : '0000001234'}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start" sx={{ m: 0 }}>
+              <IconButton
+                type="button"
+                sx={{ p: 0.5, mr: 0.5 }}
+                aria-label="search"
+                onClick={handleSearchClick}
+                disabled={!!helperText}
+              >
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        focused
+        color="secondary"
         inputProps={{ 'aria-label': 'search' }}
         error={!!helperText}
         helperText={helperText}

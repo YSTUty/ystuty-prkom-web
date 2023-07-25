@@ -4,7 +4,7 @@
   "common.button.originalList": "Посмотерть оригинал",
   "page.main.title": "ЯГТУ — Списки поступающих",
   "page.main.title.short": "ЯГТУ. Списки",
-  "page.main.header.field.uid": "Введите свой УК",
+  "page.main.header.field.uid": "Поиск по УК",
   "page.incomings.list.subheader": "Выбор специальности",
   "page.incomings.list.backHere": "Вернуться к списку специальностей",
   "page.incomings.list.specialityItem.fileInfo.countPlaces": "Мест: {count}",
