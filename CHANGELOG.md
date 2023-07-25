@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.1...v0.3.2) (2023-07-25)
+
+
+### 🧹 Chore
+
+* **component:** update style for user uid field ([9fb2bb6](https://github.com/YSTUty/ystuty-prkom-web/commit/9fb2bb61a62b54dec1b46e1d0d9b5348be0674bb))
+* **public:** update robots.txt ([696d57a](https://github.com/YSTUty/ystuty-prkom-web/commit/696d57abf2443c3db8dd74ed4d2fa194284b47ff))
+
+
+### 🚀 Features
+
+* **container:** add user uid field to main page ([462fbbf](https://github.com/YSTUty/ystuty-prkom-web/commit/462fbbfd4a331d249f3dc1631e51358fe2454853))
+
+
+### 🌟 Feature Improvements
+
+* **component:** add provider to use multiple user uid fields ([159c99b](https://github.com/YSTUty/ystuty-prkom-web/commit/159c99ba89034d12ee236884feaf31b98ef90b70))
+* **component:** add scrolling debounce to abiturient list ([6b772e1](https://github.com/YSTUty/ystuty-prkom-web/commit/6b772e157810cf096e40a01015bc6d7777a12a07))
+
 ### [0.3.1](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.0...v0.3.1) (2023-07-23)
 
 
