@@ -31,27 +31,25 @@ const StyledInput = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const UserUidField = () => {
+export const UserUidContext = React.createContext<{
+  value: string;
+  formatedUid?: string;
+  helperText?: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+}>({
+  value: '',
+  helperText: '',
+  formatedUid: '',
+  setValue: () => {},
+});
+
+export const UserUidProvider = (props: { children: any }) => {
   const dispatch = useDispatch();
   const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
-  const { formatMessage } = useIntl();
-  const navigate = useNavigate();
 
   const [value, setValue] = React.useState<string>(userUid);
   const [formatedUid, setFormatedUid] = React.useState<string>();
   const [helperText, setHelperText] = React.useState<string>();
-
-  const onChangeValue = React.useCallback(
-    (value: string) => {
-      setValue(
-        value
-          .replace(/^\s/g, '')
-          .replace(/[^0-9\-\s]+/g, '')
-          .replace(/\s\s+/g, ' '),
-      );
-    },
-    [setValue],
-  );
 
   useDebounce(
     () => {
@@ -61,21 +59,9 @@ const UserUidField = () => {
     [value],
   );
 
-  const handleSearchClick = React.useCallback(
-    (event: React.FormEvent) => {
-      event.preventDefault();
-      if (!!helperText) {
-        return;
-      }
-      navigate(`/user/${formatedUid}`);
-    },
-    [formatedUid, helperText],
-  );
-
   // * Formatting uid
   React.useEffect(() => {
-    let _userUid = value || userUid;
-    const uidNumber = _userUid.replace(/[^0-9]+/g, '').trim();
+    const uidNumber = userUid.replace(/[^0-9]+/g, '').trim();
     if (!uidNumber) {
       setHelperText(undefined);
       setFormatedUid('');
@@ -83,12 +69,14 @@ const UserUidField = () => {
     }
 
     let formatedUid = '';
-    if (uidNumber.startsWith('000') || (!_userUid.includes('-') && uidNumber.length > 3 && uidNumber.length < 10)) {
-      formatedUid = otherUtils.convertToNumericUid(uidNumber);
-      // } else if (uidNumber.startsWith('00')) {
-      //   setValue(Number(uidNumber).toString());
-      //   return;
-    } else if (!uidNumber.startsWith('0000') && uidNumber.length > 10) {
+    // ? don't use this, to make flexible search work
+    // if (uidNumber.startsWith('000') || (!_userUid.includes('-') && uidNumber.length > 3 && uidNumber.length < 10)) {
+    //   formatedUid = otherUtils.convertToNumericUid(uidNumber);
+    // } else if (uidNumber.startsWith('00')) {
+    //   setValue(Number(uidNumber).toString());
+    //   return;
+    // } else
+    if (!uidNumber.startsWith('0000') && uidNumber.length > 10) {
       let num = Number(uidNumber);
       try {
         formatedUid = otherUtils.convertToSnilsUid(num);
@@ -108,6 +96,42 @@ const UserUidField = () => {
       setValue(formatedUid);
     }
   }, [userUid, setFormatedUid, setValue]);
+
+  const contextValue = React.useMemo(
+    () => ({ value, formatedUid, helperText, setValue }),
+    [value, formatedUid, helperText],
+  );
+
+  return <UserUidContext.Provider value={contextValue}>{props.children}</UserUidContext.Provider>;
+};
+
+const UserUidField = () => {
+  const { value, setValue, formatedUid, helperText } = React.useContext(UserUidContext);
+  const { formatMessage } = useIntl();
+  const navigate = useNavigate();
+
+  const onChangeValue = React.useCallback(
+    (value: string) => {
+      setValue(
+        value
+          .replace(/^\s/g, '')
+          .replace(/[^0-9\-\s]+/g, '')
+          .replace(/\s\s+/g, ' '),
+      );
+    },
+    [setValue],
+  );
+
+  const handleSearchClick = React.useCallback(
+    (event: React.FormEvent) => {
+      event.preventDefault();
+      if (!!helperText) {
+        return;
+      }
+      navigate(`/user/${formatedUid}`);
+    },
+    [formatedUid, helperText],
+  );
 
   return (
     <Search onSubmit={handleSearchClick}>

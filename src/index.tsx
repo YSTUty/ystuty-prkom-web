@@ -10,6 +10,7 @@ import './index.css';
 import Localizer from './providers/Localizer.provider';
 import { ThemeModeProvider } from './providers/ThemeMode.provider';
 import App from './containers/App.container';
+import { UserUidProvider } from './components/UserUidField.component';
 import YandexMetrikaComponent from './components/YandexMetrika.component';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -18,9 +19,11 @@ root.render(
     <Provider store={store}>
       <Localizer>
         <ThemeModeProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <UserUidProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </UserUidProvider>
         </ThemeModeProvider>
         <YandexMetrikaComponent />
       </Localizer>
