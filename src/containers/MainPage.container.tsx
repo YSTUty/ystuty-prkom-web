@@ -16,6 +16,7 @@ import * as envUtils from '../utils/env.utils';
 import { IncomingsLink } from '../interfaces/prkom.interface';
 
 import IncomingsLinkList from '../components/IncomingsLinkList.component';
+import UserUidField from '../components/UserUidField.component';
 
 const STORE_CACHED_FULL_LIST_KEY = 'CACHED_FULL_LIST';
 
@@ -95,13 +96,8 @@ const MainPage = () => {
   return (
     <Container component="main" maxWidth="lg" sx={{ mb: 4, px: { xs: 1, sm: 3 } }}>
       <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-        <Typography component="h1" variant="h4" align="center">
+        <Typography component="h1" variant="h5" align="center">
           <FormattedMessage id="page.main.title" />
-          {isCached && (
-            <Typography component={'span'} fontSize={9}>
-              cache
-            </Typography>
-          )}
         </Typography>
 
         <Typography align="center" py={1}>
@@ -117,6 +113,24 @@ const MainPage = () => {
             <FormattedMessage id="common.button.originalList" />
           </Button>
         </Typography>
+
+        <Paper
+          variant="elevation"
+          elevation={4}
+          sx={{
+            my: 1,
+            py: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: { xs: 'column', md: 'row' },
+          }}
+        >
+          <Typography component="h3" variant="subtitle2" sx={{ mb: { xs: 1, md: 0 } }}>
+            <FormattedMessage id="page.main.field.uid.label" />
+          </Typography>
+          <UserUidField />
+        </Paper>
 
         {errorMsg ? (
           <Paper elevation={3} sx={{ mt: 2, py: 2, textAlign: 'center' }}>
@@ -140,6 +154,11 @@ const MainPage = () => {
               </IconButton>
               {fetchedTime && (
                 <FormattedDate value={fetchedTime} day="2-digit" hour="2-digit" minute="2-digit" second="2-digit" />
+              )}
+              {isCached && (
+                <Typography component={'span'} pl={1} fontSize={9}>
+                  cache
+                </Typography>
               )}
             </Typography>
             <IncomingsLinkList list={listData} />
