@@ -77,13 +77,12 @@ export const UserUidProvider = (props: { children: any }) => {
     //   return;
     // } else
     if (!uidNumber.startsWith('0000') && uidNumber.length > 10) {
-      let num = Number(uidNumber);
       try {
-        formatedUid = otherUtils.convertToSnilsUid(num);
+        formatedUid = otherUtils.convertToSnilsUid(uidNumber);
         if (formatedUid) {
           setValue(formatedUid);
         }
-        otherUtils.validateSnils(num);
+        otherUtils.validateSnils(uidNumber);
       } catch (err) {
         setHelperText((err as Error).message);
         return;
