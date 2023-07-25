@@ -198,7 +198,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                         ? theme.palette.success.main
                         : null
                       : row.isRed
-                      ? (row[e] === null || e === 'uid' || e === 'position') && e !== 'priorityHight'
+                      ? (row[e] === null || e === 'uid' || e === 'position') && e !== 'isHightPriority'
                         ? theme.palette.warning.main
                         : null
                       : null,
@@ -278,7 +278,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                       ? 250
                       : e === 'originalInUniversity' || e === 'originalFromEGPU' || e === 'preemptiveRight'
                       ? 135
-                      : e === 'state' || e === 'priority' || e === 'priorityHight'
+                      : e === 'state' || e === 'priority' || e === 'isHightPriority'
                       ? 100
                       : 150
                   }

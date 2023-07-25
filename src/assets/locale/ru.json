@@ -24,7 +24,7 @@
   "page.abiturient.list.table.header.originalFromEGPU": "Оригинал из ЕПГУ",
   "page.abiturient.list.table.header.state": "Состояние",
   "page.abiturient.list.table.header.priority": "Приоритет",
-  "page.abiturient.list.table.header.priorityHight": "Высший приоритет",
+  "page.abiturient.list.table.header.isHightPriority": "Это высший приоритет",
   "page.abiturient.list.table.header.scoreSubjects": "Баллы по предметам",
   "page.abiturient.list.table.header.scoreExam": "Вступительное испытание",
   "page.abiturient.list.table.header.competitionGroupName": "Конкурсная группа",

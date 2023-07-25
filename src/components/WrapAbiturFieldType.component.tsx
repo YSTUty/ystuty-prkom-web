@@ -32,11 +32,11 @@ const WrapAbiturFieldType: React.FC<
     case 'scoreSubjectsSum':
     case 'scoreCompetitive':
     case 'priority':
-    case 'priorityHight':
       return val;
     // * Bool
     case 'preemptiveRight':
     case 'originalFromEGPU':
+    case 'isHightPriority':
       return val ? <CheckIcon color="success" /> : null;
     case 'originalInUniversity':
       return val ? (
