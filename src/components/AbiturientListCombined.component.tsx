@@ -80,7 +80,14 @@ const ApplicationTableRow: React.FC<{ response: AbiturientInfoResponse; hasBefor
         >
           {item.position} / {info.numbersInfo.toenroll}
         </StyledTableCell>
-        {hasBeforeGreens && <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>}
+        {hasBeforeGreens && (
+          <>
+            <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>
+            <StyledTableCell align="center">
+              <WrapAbiturFieldType item={item} key_="isHightPriority" />
+            </StyledTableCell>
+          </>
+        )}
         <StyledTableCell>
           <Button
             component={Link}
@@ -101,13 +108,13 @@ const ApplicationTableRow: React.FC<{ response: AbiturientInfoResponse; hasBefor
         <StyledTableCell>
           <WrapAbiturFieldType item={info} key_="levelTraining" />
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell align="center">
           <WrapAbiturFieldType item={item} key_="state" />
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell align="center">
           <WrapAbiturFieldType item={item} key_="originalInUniversity" />
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell align="center">
           <WrapAbiturFieldType item={item} key_="originalFromEGPU" />
         </StyledTableCell>
       </TableRow>
@@ -158,9 +165,14 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
               <FormattedMessage id="page.abiturient.list.table.header.enroll" />
             </StyledTableCell>
             {hasBeforeGreens && (
-              <StyledTableCell>
-                <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
-              </StyledTableCell>
+              <>
+                <StyledTableCell>
+                  <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <FormattedMessage id="page.abiturient.list.table.header.isHightPriority" />
+                </StyledTableCell>
+              </>
             )}
             <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.competitionGroupName" />
@@ -171,13 +183,13 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
             <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.levelTraining" />
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell align="center">
               <FormattedMessage id="page.abiturient.list.table.header.state" />
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell align="center">
               <FormattedMessage id="page.abiturient.list.table.header.originalInUniversity" />
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell align="center">
               <FormattedMessage id="page.abiturient.list.table.header.originalFromEGPU" />
             </StyledTableCell>
           </StyledTableRow>

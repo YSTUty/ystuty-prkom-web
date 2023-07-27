@@ -70,10 +70,7 @@ const VirtuosoTableComponents: TableComponents<AbiturientInfo, VirtuosoContextTy
         role="checkbox"
         aria-checked={isItemUserUid}
         selected={isItemUserUid}
-        sx={{
-          '&:last-child td, &:last-child th': { border: 0 },
-          cursor: 'pointer',
-        }}
+        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         {...props}
       />
     );
@@ -169,13 +166,12 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                     // rowSpan={1}
                     // colSpan={1}
                     sx={(theme) => ({
-                      backgroundColor: row.isGreen
-                        ? theme.palette.success.main
-                        : row.isRed
-                        ? score === null || (minScore && score < minScore)
-                          ? theme.palette.warning.main
-                          : null
-                        : null,
+                      backgroundColor:
+                        !row.isGreen && row.isRed
+                          ? score === null || (minScore && score < minScore)
+                            ? theme.palette.warning.main
+                            : null
+                          : null,
                     })}
                     align="center"
                   >
@@ -194,7 +190,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                     e === 'uid' && isItemUserUid
                       ? theme.palette.primary.main
                       : row.isGreen
-                      ? e === 'position'
+                      ? e === 'position' || e === 'uid' // || e === 'totalScore'
                         ? theme.palette.success.main
                         : null
                       : row.isRed
