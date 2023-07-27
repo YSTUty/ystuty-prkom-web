@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.3](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.2...v0.3.3) (2023-07-27)
+
+
+### 🐛 Bug Fixes
+
+* **component:** dont convert uid to number (keep first `0`) ([f6c4dc7](https://github.com/YSTUty/ystuty-prkom-web/commit/f6c4dc7de603515c7f56636e6f3748ec408d64f9))
+
+
+### 🧹 Chore
+
+* **app:** update `isHightPriority` field ([a35809a](https://github.com/YSTUty/ystuty-prkom-web/commit/a35809a6415957ec39a8d919c2ccd3ecf32b8760))
+* **component:** update abiturient list style by display greens ([f944daf](https://github.com/YSTUty/ystuty-prkom-web/commit/f944dafc475efdbdab7c2c2b162bf6ec40e237eb))
+
 ### [0.3.2](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.1...v0.3.2) (2023-07-25)
 
 
