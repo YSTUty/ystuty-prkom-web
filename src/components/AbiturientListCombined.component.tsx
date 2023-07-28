@@ -59,7 +59,12 @@ const ApplicationTableRow: React.FC<{
 
   return (
     <>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableRow
+        sx={(theme) => ({
+          '& > *': { borderBottom: 'unset' },
+          backgroundColor: item.isGreen ? theme.palette.success.dark : item.isRed ? theme.palette.warning.main : null,
+        })}
+      >
         <StyledTableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
