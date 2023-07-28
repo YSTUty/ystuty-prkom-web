@@ -83,7 +83,7 @@ const ApplicationTableRow: React.FC<{
         </StyledTableCell>
         {hasBeforeOriginals && (
           <StyledTableCell>
-            {response.payload.beforeOriginals || '-'} / {info.numbersInfo.toenroll}
+            {(response.payload.beforeOriginals || 0) + 1} / {info.numbersInfo.toenroll}
           </StyledTableCell>
         )}
         {hasBeforeGreens && <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>}
