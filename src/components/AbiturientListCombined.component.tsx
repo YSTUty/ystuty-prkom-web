@@ -62,32 +62,21 @@ const ApplicationTableRow: React.FC<{ response: AbiturientInfoResponse; hasBefor
         </StyledTableCell>
 
         {/* <StyledTableCell
-          component="th"
-          scope="row"
-          sx={(theme) => ({
-            backgroundColor: item.isRed ? theme.palette.warning.main : null,
-            minWidth: 140,
-          })}
-        >
-          <WrapAbiturFieldType item={item} key_="uid" />
-        </StyledTableCell> */}
-        <StyledTableCell
           // align="center"
           sx={(theme) => ({
             backgroundColor: item.isGreen ? theme.palette.success.main : item.isRed ? theme.palette.warning.main : null,
             fontWeight: 'bold',
           })}
         >
-          {item.position} / {info.numbersInfo.toenroll}
+          {item.position}/ {info.numbersInfo.toenroll}
+        </StyledTableCell> */}
+        <StyledTableCell>
+          <WrapAbiturFieldType item={item} key_="priority" />
         </StyledTableCell>
-        {hasBeforeGreens && (
-          <>
-            <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>
-            <StyledTableCell align="center">
-              <WrapAbiturFieldType item={item} key_="isHightPriority" />
-            </StyledTableCell>
-          </>
-        )}
+        <StyledTableCell align="center">
+          <WrapAbiturFieldType item={item} key_="isHightPriority" />
+        </StyledTableCell>
+        {hasBeforeGreens && <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>}
         <StyledTableCell>
           <Button
             component={Link}
@@ -159,20 +148,20 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
         <TableHead>
           <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
             <StyledTableCell />
-            {/* <StyledTableCell>UID</StyledTableCell> */}
-            <StyledTableCell>
+            {/* <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.position2" /> /{' '}
               <FormattedMessage id="page.abiturient.list.table.header.enroll" />
+            </StyledTableCell> */}
+            <StyledTableCell>
+              <FormattedMessage id="page.abiturient.list.table.header.priority" />
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <FormattedMessage id="page.abiturient.list.table.header.isHightPriority" />
             </StyledTableCell>
             {hasBeforeGreens && (
-              <>
-                <StyledTableCell>
-                  <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <FormattedMessage id="page.abiturient.list.table.header.isHightPriority" />
-                </StyledTableCell>
-              </>
+              <StyledTableCell>
+                <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
+              </StyledTableCell>
             )}
             <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.competitionGroupName" />
