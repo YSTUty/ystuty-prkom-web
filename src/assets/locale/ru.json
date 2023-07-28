@@ -32,6 +32,7 @@
   "page.abiturient.list.table.header.levelTraining": "Уровень подготовки",
   "page.abiturient.list.table.header.enroll": "К зачислению",
   "page.abiturient.list.table.header.beforeGreens": "До проходит",
+  "page.abiturient.list.table.header.beforeOriginals": "Позиция по оригиналам",
   "page.user.userUid.info": "Информация по уникальному коду",
   "page.user.emptyData": "Информации по указанному Уникальному коду не было найдено",
   "page.user.userUid.appCount": "Найдено {count, plural, one {# заявление} few {# заявления} other {# заявлений}}",
