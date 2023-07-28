@@ -136,13 +136,32 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
     return () => void alreadyScrolled && clearInterval(interval);
   }, [list, isPersonal, scrollToRow, setAlreadyScrolled]);
 
+  const { headerFiltered, hasSubjects } = React.useMemo(() => {
+    const [firstItem] = list;
+    if (!firstItem) {
+      return { headerFiltered: [], hasSubjects: false } as const;
+    }
+
+    let header = Object.keys(firstItem) as (keyof AbiturientInfo)[];
+    let headerFiltered = header.filter((e) => !['isGreen', 'isRed'].includes(e));
+
+    // feature: change column position
+    const oldPlace = headerFiltered.findIndex((e) => e === 'preemptiveRight');
+    const newPlace = headerFiltered.findIndex((e) => e === 'totalScore');
+    if (oldPlace !== -1 && newPlace !== -1) {
+      const [item] = headerFiltered.splice(oldPlace, 1);
+      headerFiltered.splice(newPlace > 0 ? newPlace : 0, 0, item);
+    }
+
+    const hasSubjects = 'scoreSubjects' in firstItem && firstItem.scoreSubjects;
+
+    return { headerFiltered, hasSubjects };
+  }, [list]);
+
   const rowContent = React.useCallback(
     (_index: number, row: AbiturientInfo) => {
-      let firstItem = list[0];
-      let header = Object.keys(firstItem) as (keyof AbiturientInfo)[];
-      let headerFiltered = header.filter((e) => !['isGreen', 'isRed'].includes(e));
-
       const isItemUserUid = isUserUid(row.uid);
+
       return (
         <>
           {!isPersonal && (
@@ -225,18 +244,12 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
         </>
       );
     },
-    [isPersonal, list, isUserUid],
+    [isPersonal, list, headerFiltered, hasSubjects, isUserUid],
   );
 
   if (list.length === 0) {
     return null;
   }
-
-  let firstItem = list[0];
-  let header = Object.keys(firstItem) as (keyof AbiturientInfo)[];
-  let headerFiltered = header.filter((e) => !['isGreen', 'isRed'].includes(e));
-
-  const hasSubjects = 'scoreSubjects' in firstItem && firstItem.scoreSubjects;
 
   return (
     <Paper style={{ height: 'calc(100vh - 130px)', width: '100%' }}>
