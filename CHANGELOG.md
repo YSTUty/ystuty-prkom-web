@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.4](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.3...v0.3.4) (2023-07-28)
+
+
+### 🚀 Features
+
+* **component:** add `beforeOriginals` field to abiturient list ([12a899f](https://github.com/YSTUty/ystuty-prkom-web/commit/12a899f148cc1f8aa59544267ff369e528587c72))
+
+
+### 🧹 Chore
+
+* **component:** change column position in abiturient list ([d077c05](https://github.com/YSTUty/ystuty-prkom-web/commit/d077c05164a276012dedf3398021b89f5eba6fe2))
+* **component:** change table fields (hide position) ([1140f40](https://github.com/YSTUty/ystuty-prkom-web/commit/1140f4066c7d4562f3278621e8e3cc0b00672fc5))
+
 ### [0.3.3](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.2...v0.3.3) (2023-07-27)
 
 
