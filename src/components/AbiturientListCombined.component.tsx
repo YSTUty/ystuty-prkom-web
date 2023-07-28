@@ -157,6 +157,9 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
   const { listData } = props;
   const hasBeforeGreens = listData.some((e) => !!e.payload.beforeGreens);
   const hasBeforeOriginals = listData.some((e) => !!e.payload.beforeOriginals);
+
+  listData.sort((a, b) => a.item.priority - b.item.priority);
+
   if (listData.length === 0) {
     return null;
   }
