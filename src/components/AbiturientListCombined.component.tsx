@@ -86,12 +86,15 @@ const ApplicationTableRow: React.FC<{
         <StyledTableCell align="center">
           <WrapAbiturFieldType item={item} key_="isHightPriority" />
         </StyledTableCell>
-        {hasBeforeOriginals && (
-          <StyledTableCell>
-            {(response.payload.beforeOriginals || 0) + 1} / {info.numbersInfo.toenroll}
+        <StyledTableCell align="center">{info.numbersInfo.toenroll}</StyledTableCell>
+        {hasBeforeGreens && (
+          <StyledTableCell align="center">
+            {response.payload.beforeGreens ? response.payload.beforeGreens + 1 : '-'}
           </StyledTableCell>
         )}
-        {hasBeforeGreens && <StyledTableCell>{response.payload.beforeGreens || '-'}</StyledTableCell>}
+        {hasBeforeOriginals && (
+          <StyledTableCell align="center">{(response.payload.beforeOriginals || 0) + 1}</StyledTableCell>
+        )}
         <StyledTableCell>
           <Button
             component={Link}
@@ -174,15 +177,17 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
             <StyledTableCell align="center">
               <FormattedMessage id="page.abiturient.list.table.header.isHightPriority" />
             </StyledTableCell>
+            <StyledTableCell align="center">
+              <FormattedMessage id="page.abiturient.list.table.header.enroll" />
+            </StyledTableCell>
             {hasBeforeGreens && (
-              <StyledTableCell>
+              <StyledTableCell align="center">
                 <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
               </StyledTableCell>
             )}
             {hasBeforeOriginals && (
-              <StyledTableCell>
-                <FormattedMessage id="page.abiturient.list.table.header.beforeOriginals" /> /{' '}
-                <FormattedMessage id="page.abiturient.list.table.header.enroll" />
+              <StyledTableCell align="center">
+                <FormattedMessage id="page.abiturient.list.table.header.beforeOriginals" />
               </StyledTableCell>
             )}
             <StyledTableCell>
