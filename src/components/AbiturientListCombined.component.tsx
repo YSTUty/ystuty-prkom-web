@@ -86,7 +86,9 @@ const ApplicationTableRow: React.FC<{
         <StyledTableCell align="center">
           <WrapAbiturFieldType item={item} key_="isHightPriority" />
         </StyledTableCell>
-        <StyledTableCell align="center">{info.numbersInfo.toenroll}</StyledTableCell>
+        <StyledTableCell align="center">
+          {info.numbersInfo.toenroll || formatMessage({ id: 'page.abiturient.list.enrollFinish' })}
+        </StyledTableCell>
         {hasBeforeGreens && (
           <StyledTableCell align="center">
             {response.payload.beforeGreens ? response.payload.beforeGreens + 1 : '-'}
