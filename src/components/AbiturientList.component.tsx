@@ -201,7 +201,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                       backgroundColor:
                         !row.isGreen && row.isRed
                           ? score === null || (minScore && score < minScore)
-                            ? theme.palette.warning.main
+                            ? theme.palette.warning[theme.palette.mode]
                             : null
                           : null,
                     })}
@@ -220,14 +220,14 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                 sx={(theme) => ({
                   backgroundColor:
                     e === 'uid' && isItemUserUid
-                      ? theme.palette.primary.main
+                      ? theme.palette.primary[theme.palette.mode]
                       : row.isGreen
-                      ? e === 'position' || e === 'uid' // || e === 'totalScore'
-                        ? theme.palette.success.main
-                        : null
-                      : row.isRed
+                      ? // ? e === 'position' || e === 'uid' // || e === 'totalScore'
+                        theme.palette.success[theme.palette.mode]
+                      : // : null
+                      row.isRed
                       ? (row[e] === null || e === 'uid' || e === 'position') && e !== 'isHightPriority'
-                        ? theme.palette.warning.main
+                        ? theme.palette.warning[theme.palette.mode]
                         : null
                       : null,
                   ...(e === 'position' && {

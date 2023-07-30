@@ -66,7 +66,11 @@ const ApplicationTableRow: React.FC<{
       <TableRow
         sx={(theme) => ({
           '& > *': { borderBottom: 'unset' },
-          backgroundColor: item.isGreen ? theme.palette.success.dark : item.isRed ? theme.palette.warning.main : null,
+          backgroundColor: item.isGreen
+            ? theme.palette.success[theme.palette.mode]
+            : item.isRed
+            ? theme.palette.warning[theme.palette.mode]
+            : null,
         })}
       >
         <StyledTableCell>
