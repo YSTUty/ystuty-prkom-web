@@ -1,5 +1,6 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Link as LinkDom } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -19,6 +20,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import YstuPrkomIcon from '@mui/icons-material/List';
 
 import * as envUtils from '../utils/env.utils';
+import { RootState } from '../store';
 
 import { ThemeModeButton } from '../providers/ThemeMode.provider';
 import MainPageContainer from './MainPage.container';
@@ -54,6 +56,7 @@ const Copyright = () => {
 };
 
 const App = () => {
+  const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
   const theme = useTheme();
   const { formatMessage } = useIntl();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -75,7 +78,10 @@ const App = () => {
               variant="h6"
               color="inherit"
               noWrap
+              component={LinkDom}
+              to={userUid ? `/user/${userUid}` : '/'}
               sx={(theme) => ({
+                textDecoration: 'none',
                 mr: { xs: 1, sm: 2 },
                 fontSize: { xs: 14, sm: theme.typography.h6.fontSize },
                 minWidth: 95,
@@ -89,6 +95,7 @@ const App = () => {
                 <FormattedMessage id="page.main.title.short" />
               )}
             </Typography>
+
             <Divider orientation="vertical" flexItem />
 
             <UserUidField />
@@ -103,6 +110,7 @@ const App = () => {
                   component="a"
                   color="secondary"
                   href={envUtils.linkToYstuPrkom}
+                  target="_blank"
                   title={formatMessage({ id: 'common.button.viewOriginalList' })}
                 >
                   <YstuPrkomIcon />
