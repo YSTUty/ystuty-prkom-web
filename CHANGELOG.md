@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.5](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.4...v0.3.5) (2023-07-30)
+
+
+### 🐛 Bug Fixes
+
+* **component:** increment `beforeOriginals` for calculate position ([1040725](https://github.com/YSTUty/ystuty-prkom-web/commit/1040725e9f1e4e30c0e3690df175aa1b3f7f47b8))
+
+
+### 🚀 Features
+
+* **container:** add link to main|user page for appbar title ([caee9a3](https://github.com/YSTUty/ystuty-prkom-web/commit/caee9a39c4c88bc6f3960f60dec9a44f893e424b))
+
+
+### 🧹 Chore
+
+* **component:** add green highlight row in abiturient list ([ee6e647](https://github.com/YSTUty/ystuty-prkom-web/commit/ee6e64751ecde4375057fb1e423394e393147c37))
+* **component:** add phrase as `enrollFinish` to abiturient list ([61d5b78](https://github.com/YSTUty/ystuty-prkom-web/commit/61d5b78d89dc6800038a2dff10aeb9a5ce7f04a8))
+* **component:** add sorting of abiturient list by `priority` ([c4717f2](https://github.com/YSTUty/ystuty-prkom-web/commit/c4717f2dcff0a89c8add14ea8761c0bde377bc87))
+* **component:** correct row green color by theme mode ([fb01ecc](https://github.com/YSTUty/ystuty-prkom-web/commit/fb01eccf798a6087d2a66b4caf8958a19b3ffa9d))
+* **component:** hide empty columns ([451b858](https://github.com/YSTUty/ystuty-prkom-web/commit/451b858091808c0edf7dbfd791886aea793b0eee))
+* **component:** update table columns in abiturient list ([6658a02](https://github.com/YSTUty/ystuty-prkom-web/commit/6658a02274ca1d675b4cb9cca03c69c3bc37927a))
+
 ### [0.3.4](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.3...v0.3.4) (2023-07-28)
 
 
