@@ -14,12 +14,15 @@ import {
 } from '../interfaces/prkom.interface';
 
 const WrapAbiturFieldType: React.FC<
-  { item: AbiturientInfo; key_: keyof AbiturientInfo } | { item: IncomingsPageInfo; key_: keyof IncomingsPageInfo }
+  (
+    | { item: AbiturientInfo; key_: keyof AbiturientInfo }
+    | { item: IncomingsPageInfo; key_: keyof IncomingsPageInfo }
+  ) & { val?: any }
 > = (props) => {
   const { key_: key } = props;
 
   let val: any = null;
-  if ('val' in props && props.val) {
+  if ('val' in props && props.val !== undefined) {
     val = props.val;
   } else if (props.item) {
     val = (props.item as any)[key];

@@ -47,12 +47,16 @@ const ApplicationTableRow: React.FC<{
   response: AbiturientInfoResponse;
   hasBeforeGreens?: boolean;
   hasBeforeOriginals?: boolean;
+  hasHightPriorities?: boolean;
+  combineOriginalInfo?: boolean;
 }> = (props) => {
   const {
     response,
     response: { info, item },
     hasBeforeGreens,
     hasBeforeOriginals,
+    hasHightPriorities,
+    combineOriginalInfo,
   } = props;
   const { formatMessage } = useIntl();
   const [open, setOpen] = React.useState(false);
@@ -83,9 +87,11 @@ const ApplicationTableRow: React.FC<{
         <StyledTableCell>
           <WrapAbiturFieldType item={item} key_="priority" />
         </StyledTableCell>
-        <StyledTableCell align="center">
-          <WrapAbiturFieldType item={item} key_="isHightPriority" />
-        </StyledTableCell>
+        {hasHightPriorities && (
+          <StyledTableCell align="center">
+            <WrapAbiturFieldType item={item} key_="isHightPriority" />
+          </StyledTableCell>
+        )}
         <StyledTableCell align="center">
           {info.numbersInfo.toenroll || formatMessage({ id: 'page.abiturient.list.enrollFinish' })}
         </StyledTableCell>
@@ -120,12 +126,29 @@ const ApplicationTableRow: React.FC<{
         <StyledTableCell align="center">
           <WrapAbiturFieldType item={item} key_="state" />
         </StyledTableCell>
-        <StyledTableCell align="center">
-          <WrapAbiturFieldType item={item} key_="originalInUniversity" />
+        <StyledTableCell
+          align="center"
+          title={formatMessage({
+            id: `page.abiturient.list.table.header.${
+              item.originalInUniversity
+                ? 'originalInUniversity'
+                : item.originalFromEGPU
+                ? 'originalFromEGPU'
+                : 'combineOriginalInfoNot'
+            }`,
+          })}
+        >
+          <WrapAbiturFieldType
+            item={item}
+            key_="originalInUniversity"
+            val={combineOriginalInfo ? item.originalInUniversity || item.originalFromEGPU : undefined}
+          />
         </StyledTableCell>
-        <StyledTableCell align="center">
-          <WrapAbiturFieldType item={item} key_="originalFromEGPU" />
-        </StyledTableCell>
+        {!combineOriginalInfo && (
+          <StyledTableCell align="center">
+            <WrapAbiturFieldType item={item} key_="originalFromEGPU" />
+          </StyledTableCell>
+        )}
       </TableRow>
       <TableRow>
         <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -159,6 +182,8 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
   const { listData } = props;
   const hasBeforeGreens = listData.some((e) => !!e.payload.beforeGreens);
   const hasBeforeOriginals = listData.some((e) => !!e.payload.beforeOriginals);
+  const hasHightPriorities = listData.some((e) => e.item.isHightPriority);
+  const combineOriginalInfo = true;
 
   listData.sort((a, b) => a.item.priority - b.item.priority);
 
@@ -179,9 +204,11 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
             <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.priority" />
             </StyledTableCell>
-            <StyledTableCell align="center">
-              <FormattedMessage id="page.abiturient.list.table.header.isHightPriority" />
-            </StyledTableCell>
+            {hasHightPriorities && (
+              <StyledTableCell align="center">
+                <FormattedMessage id="page.abiturient.list.table.header.isHightPriority" />
+              </StyledTableCell>
+            )}
             <StyledTableCell align="center">
               <FormattedMessage id="page.abiturient.list.table.header.enroll" />
             </StyledTableCell>
@@ -208,11 +235,17 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
               <FormattedMessage id="page.abiturient.list.table.header.state" />
             </StyledTableCell>
             <StyledTableCell align="center">
-              <FormattedMessage id="page.abiturient.list.table.header.originalInUniversity" />
+              <FormattedMessage
+                id={`page.abiturient.list.table.header.${
+                  combineOriginalInfo ? 'combineOriginalInfo' : 'originalInUniversity'
+                }`}
+              />
             </StyledTableCell>
-            <StyledTableCell align="center">
-              <FormattedMessage id="page.abiturient.list.table.header.originalFromEGPU" />
-            </StyledTableCell>
+            {!combineOriginalInfo && (
+              <StyledTableCell align="center">
+                <FormattedMessage id="page.abiturient.list.table.header.originalFromEGPU" />
+              </StyledTableCell>
+            )}
           </StyledTableRow>
         </TableHead>
 
@@ -223,6 +256,8 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
               response={response}
               hasBeforeGreens={hasBeforeGreens}
               hasBeforeOriginals={hasBeforeOriginals}
+              hasHightPriorities={hasHightPriorities}
+              combineOriginalInfo={combineOriginalInfo}
             />
           ))}
         </TableBody>

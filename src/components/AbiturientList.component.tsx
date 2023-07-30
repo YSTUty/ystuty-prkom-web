@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useDebounce } from 'react-use';
 import { TableVirtuoso, TableComponents, VirtuosoHandle } from 'react-virtuoso';
 
@@ -19,6 +19,7 @@ import YstuPrkomIcon from '@mui/icons-material/RemoveRedEye';
 
 import { RootState } from '../store';
 import { AbiturientInfo, AbiturientInfo_Bachelor } from '../interfaces/prkom.interface';
+import * as otherUtil from '../utils/other.util';
 import * as egeScoresUtil from '../utils/ege-scores.util';
 
 import TelegramButton from './TelegramButton.component';
@@ -81,10 +82,12 @@ const VirtuosoTableComponents: TableComponents<AbiturientInfo, VirtuosoContextTy
 const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPersonal?: boolean }> = (props) => {
   const { list, titles, isPersonal } = props;
   const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
+  const { formatMessage } = useIntl();
 
   const [alreadyScrolled, setAlreadyScrolled] = React.useState<boolean>(false);
   const tableHeaderRef = React.useRef<HTMLTableRowElement>(null);
   const virtuosoRef = React.useRef<VirtuosoHandle>(null);
+  const combineOriginalInfo = true;
 
   const isUserUid = React.useCallback(
     (uid: string) => {
@@ -155,8 +158,18 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
 
     const hasSubjects = 'scoreSubjects' in firstItem && firstItem.scoreSubjects;
 
+    if (!list.some((e) => e.preemptiveRight)) {
+      otherUtil.removeArrayItem(headerFiltered, 'preemptiveRight');
+    }
+    if (!list.some((e) => e.isHightPriority)) {
+      otherUtil.removeArrayItem(headerFiltered, 'isHightPriority');
+    }
+    if (combineOriginalInfo || !list.some((e) => e.originalFromEGPU)) {
+      otherUtil.removeArrayItem(headerFiltered, 'originalFromEGPU');
+    }
+
     return { headerFiltered, hasSubjects };
-  }, [list]);
+  }, [list, combineOriginalInfo]);
 
   const rowContent = React.useCallback(
     (_index: number, row: AbiturientInfo) => {
@@ -222,6 +235,17 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                   }),
                 })}
                 align="center"
+                title={formatMessage({
+                  id: `page.abiturient.list.table.header.${
+                    combineOriginalInfo && e === 'originalInUniversity'
+                      ? row.originalInUniversity
+                        ? 'originalInUniversity'
+                        : row.originalFromEGPU
+                        ? 'originalFromEGPU'
+                        : 'combineOriginalInfoNot'
+                      : e
+                  }`,
+                })}
               >
                 {e === 'uid' && !isPersonal ? (
                   <Button
@@ -236,7 +260,15 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                     <WrapAbiturFieldType item={row} key_={e} />
                   </Button>
                 ) : (
-                  <WrapAbiturFieldType item={row} key_={e} />
+                  <WrapAbiturFieldType
+                    item={row}
+                    key_={e}
+                    val={
+                      combineOriginalInfo && e === 'originalInUniversity'
+                        ? row.originalInUniversity || row.originalFromEGPU
+                        : undefined
+                    }
+                  />
                 )}
               </StyledTableCell>
             ),
@@ -244,7 +276,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
         </>
       );
     },
-    [isPersonal, list, headerFiltered, hasSubjects, isUserUid],
+    [isPersonal, list, headerFiltered, hasSubjects, isUserUid, combineOriginalInfo],
   );
 
   if (list.length === 0) {
@@ -297,7 +329,13 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                     align: 'center',
                   })}
                 >
-                  <FormattedMessage id={`page.abiturient.list.table.header.${e}`} />
+                  <FormattedMessage
+                    id={`page.abiturient.list.table.header.${
+                      combineOriginalInfo && (e === 'originalInUniversity' || e === 'originalFromEGPU')
+                        ? 'combineOriginalInfo'
+                        : e
+                    }`}
+                  />
                 </StyledTableCell>
               ))}
             </StyledTableRow>
