@@ -30,6 +30,7 @@ import ViewUserApplicationsContainer from './ViewUserApplications.container';
 import VersionComponent from '../components/Version.component';
 import UserUidField from '../components/UserUidField.component';
 import ScrollToTop from '../components/ScrollToTop.component';
+import HandWave from '../components/HandWave.component';
 
 const Copyright = () => {
   return (
@@ -132,7 +133,9 @@ const App = () => {
           <Route path="/user/:userUid?" element={<ViewUserApplicationsContainer />} />
           {/* <Route path="about" element={<About />} /> */}
         </Routes>
-        <Copyright />
+        <HandWave>
+          <Copyright />
+        </HandWave>
       </Container>
       <ScrollToTop />
     </>
