@@ -11,9 +11,13 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
 import LinearProgress from '@mui/material/LinearProgress';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import CloseIcon from '@mui/icons-material/Close';
 
 import appSlice from '../store/reducer/app.slice';
 import * as envUtils from '../utils/env.utils';
@@ -30,7 +34,7 @@ const ViewUserApplications = () => {
   const dispatch = useDispatch();
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
-  const { userUid: queryUserUid } = useSelector<RootState, RootState['app']>((state) => state.app);
+  const { userUid: queryUserUid, showUserInfoMessage } = useSelector<RootState, RootState['app']>((state) => state.app);
   const userUid = userUid_?.replace(/_/, ' ') || '';
   const uidNumber = userUid.replace(/[^0-9]+/g, '');
 
@@ -107,6 +111,10 @@ const ViewUserApplications = () => {
     dispatch(appSlice.actions.setUserUid(formatedUid || ''));
   }, [formatedUid]);
 
+  const toggleUserInfoMessage = React.useCallback(() => {
+    dispatch(appSlice.actions.toggleUserInfoMessage());
+  }, [formatedUid]);
+
   // * Formatting uid
   React.useEffect(() => {
     if (!uidNumber) {
@@ -176,7 +184,7 @@ const ViewUserApplications = () => {
         </Button>
       </Container>
 
-      <Paper sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
+      <Paper sx={{ my: { xs: 1, md: 2 }, p: { xs: 2, md: 3 } }}>
         <Typography component="h1" variant="h6" align="center">
           <FormattedMessage id="page.user.userUid.info" />:{' '}
           <Button sx={(theme) => ({ color: theme.palette.secondary.main })} component="span" onClick={setUserUid}>
@@ -194,7 +202,34 @@ const ViewUserApplications = () => {
             </Typography>
           )}
         </Typography>
+        <IconButton aria-label="expand row" size="small" onClick={() => toggleUserInfoMessage()}>
+          {showUserInfoMessage ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
       </Paper>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Collapse in={showUserInfoMessage} timeout="auto" unmountOnExit>
+          <Paper elevation={5} sx={{ my: { xs: 2, md: 3 }, p: 3, minWidth: '40vw' }}>
+            <IconButton size="small" onClick={() => toggleUserInfoMessage()}>
+              <CloseIcon />
+            </IconButton>
+            {[1, 2, 3, 4, 5].map((num) => (
+              <Typography
+                component="p"
+                variant={num == 1 ? 'body1' : 'body2'}
+                sx={(theme) => ({
+                  ...(num == 1 && { color: theme.palette.info.main }),
+                  ...(num == 5 && { color: theme.palette.success.main }),
+                })}
+                py={1}
+                key={num}
+              >
+                <FormattedMessage id={`page.user.infoMessage.${num}`} />
+              </Typography>
+            ))}
+          </Paper>
+        </Collapse>
+      </Box>
 
       {listData.length > 1 ? (
         <Paper sx={{ mt: 3, p: 1 }}>
