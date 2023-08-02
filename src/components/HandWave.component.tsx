@@ -28,25 +28,24 @@ const HandWave: React.FC<React.PropsWithChildren> = (props) => {
   }
 
   return (
-    <div ref={intersectionRef}>
+    <div ref={intersectionRef} style={{ position: 'relative' }}>
       {props.children}
       <Box
         aria-hidden="true"
-        component="a"
-        href={envUtils.handWaweUrl}
-        target="_blank"
         sx={{
-          position: 'fixed',
+          position: 'absolute',
           bottom: 0,
-          right: 0,
-          left: 0,
           zIndex: 1,
           '& img': {
             display: 'block',
           },
         }}
       >
-        {isActive() && show && <img src={handWaveImg} width={100} height={80} alt="" />}
+        {isActive() && show && (
+          <a href={envUtils.handWaweUrl} target="_blank" style={{ width: '100%' }}>
+            <img src={handWaveImg} width={100} height={80} alt="" />
+          </a>
+        )}
       </Box>
     </div>
   );
