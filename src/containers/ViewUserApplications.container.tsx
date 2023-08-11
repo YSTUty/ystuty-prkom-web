@@ -22,7 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import appSlice from '../store/reducer/app.slice';
 import * as envUtils from '../utils/env.utils';
 import * as otherUtils from '../utils/other.util';
-import { AbiturientInfoResponse } from '../interfaces/prkom.interface';
+import { AbiturientInfoResponse, LevelTrainingType } from '../interfaces/prkom.interface';
 import { RootState } from '../store';
 
 import AbiturientList from '../components/AbiturientList.component';
@@ -146,6 +146,8 @@ const ViewUserApplications = () => {
     fetchListData(formatedUid!);
   }, [formatedUid]);
 
+  const levelTrainingArr = Array.from(new Set(listData.map((e) => e.info.levelTraining)));
+
   if (listData.length === 0) {
     return (
       <Box component="main" sx={{ mt: 4, mb: 4 }}>
@@ -201,6 +203,12 @@ const ViewUserApplications = () => {
               cache
             </Typography>
           )}
+        </Typography>
+        <Typography align="center">
+          <FormattedMessage id="page.abiturient.list.table.header.levelTraining" />:
+          <Typography component={'span'} sx={{ px: 1 }}>
+            {levelTrainingArr.map((e) => formatMessage({ id: `LevelTrainingType.${LevelTrainingType[e]}` })).join('/')}
+          </Typography>
         </Typography>
         <IconButton aria-label="expand row" size="small" onClick={() => toggleUserInfoMessage()}>
           {showUserInfoMessage ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}

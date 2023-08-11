@@ -14,28 +14,29 @@ import {
 } from '../interfaces/prkom.interface';
 
 const WrapAbiturFieldType: React.FC<
-  (
-    | { item: AbiturientInfo; key_: keyof AbiturientInfo }
-    | { item: IncomingsPageInfo; key_: keyof IncomingsPageInfo }
-  ) & { val?: any }
+  | { item: AbiturientInfo; key_: keyof AbiturientInfo }
+  | { item: IncomingsPageInfo; key_: keyof IncomingsPageInfo }
+  | { val: any; key_: string }
 > = (props) => {
   const { key_: key } = props;
 
   let val: any = null;
   if ('val' in props && props.val !== undefined) {
     val = props.val;
-  } else if (props.item) {
+  } else if ('item' in props) {
     val = (props.item as any)[key];
   }
 
   switch (key) {
     // * Number or null
     case 'position':
-    case 'totalScore':
     case 'scoreSubjectsSum':
     case 'scoreCompetitive':
     case 'priority':
       return val;
+    // * Number or '-'
+    case 'totalScore':
+      return val ?? '-';
     // * Bool
     case 'preemptiveRight':
     case 'originalFromEGPU':
