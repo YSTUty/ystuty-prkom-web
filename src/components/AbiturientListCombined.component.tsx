@@ -128,6 +128,9 @@ const ApplicationTableRow: React.FC<{
           </Button>
         </StyledTableCell>
         <StyledTableCell>
+          <WrapAbiturFieldType item={item} key_="totalScore" />
+        </StyledTableCell>
+        <StyledTableCell>
           <WrapAbiturFieldType item={info} key_="formTraining" />
         </StyledTableCell>
         {/* <StyledTableCell>
@@ -240,6 +243,9 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> =
             )}
             <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.competitionGroupName" />
+            </StyledTableCell>
+            <StyledTableCell>
+              <FormattedMessage id="page.abiturient.list.table.header.totalScore" />
             </StyledTableCell>
             <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.formTraining" />
