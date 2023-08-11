@@ -17,6 +17,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import AdditionalShowIcon from '@mui/icons-material/Shower';
+import AdditionalHideIcon from '@mui/icons-material/ShowerOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 
 import appSlice from '../store/reducer/app.slice';
@@ -34,7 +36,11 @@ const ViewUserApplications = () => {
   const dispatch = useDispatch();
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
-  const { userUid: queryUserUid, showUserInfoMessage } = useSelector<RootState, RootState['app']>((state) => state.app);
+  const {
+    userUid: queryUserUid,
+    showUserInfoMessage,
+    showPositions,
+  } = useSelector<RootState, RootState['app']>((state) => state.app);
   const userUid = userUid_?.replace(/_/, ' ') || '';
   const uidNumber = userUid.replace(/[^0-9]+/g, '');
 
@@ -113,7 +119,11 @@ const ViewUserApplications = () => {
 
   const toggleUserInfoMessage = React.useCallback(() => {
     dispatch(appSlice.actions.toggleUserInfoMessage());
-  }, [formatedUid]);
+  }, []);
+
+  const toggleShowPositions = React.useCallback(() => {
+    dispatch(appSlice.actions.toggleShowPositions());
+  }, []);
 
   // * Formatting uid
   React.useEffect(() => {
@@ -213,6 +223,9 @@ const ViewUserApplications = () => {
         <IconButton aria-label="expand row" size="small" onClick={() => toggleUserInfoMessage()}>
           {showUserInfoMessage ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
+        <IconButton aria-label="expand row" size="small" onClick={() => toggleShowPositions()}>
+          {showPositions ? <AdditionalShowIcon /> : <AdditionalHideIcon />}
+        </IconButton>
       </Paper>
 
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -241,7 +254,7 @@ const ViewUserApplications = () => {
 
       {listData.length > 1 ? (
         <Paper sx={{ mt: 3, p: 1 }}>
-          <AbiturientListCombined listData={listData} />
+          <AbiturientListCombined listData={listData} showPositions={showPositions} />
         </Paper>
       ) : (
         listData.map((response) => (

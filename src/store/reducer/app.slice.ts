@@ -5,6 +5,7 @@ import ym from '@appigram/react-yandex-metrika';
 export interface IAppState {
   userUid: string;
   showUserInfoMessage: boolean;
+  showPositions: boolean;
 }
 const urlParams = new URLSearchParams(window.location.search);
 const userUid = urlParams.get('userUid');
@@ -12,6 +13,7 @@ const userUid = urlParams.get('userUid');
 const initialState: IAppState = {
   userUid: userUid || store2.get('app.userUid') || '',
   showUserInfoMessage: store2.get('app.showUserInfoMessage') ?? true,
+  showPositions: store2.get('app.showPositions') ?? false,
 };
 
 export const appSlice = createSlice({
@@ -31,6 +33,15 @@ export const appSlice = createSlice({
         } catch {}
       }
       store2.set('app.showUserInfoMessage', state.showUserInfoMessage);
+    },
+    toggleShowPositions: (state, action: PayloadAction<boolean | undefined>) => {
+      state.showPositions = action.payload ?? !state.showPositions;
+      if (!state.showPositions) {
+        try {
+          ym('reachGoal', 'page.user.showPositions');
+        } catch {}
+      }
+      store2.set('app.showPositions', state.showPositions);
     },
   },
 });

@@ -191,13 +191,12 @@ const ApplicationTableRow: React.FC<{
   );
 };
 
-const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[] }> = (props) => {
-  const { listData } = props;
+const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; showPositions?: boolean }> = (props) => {
+  const { listData, showPositions = true } = props;
   const hasBeforeGreens = listData.some((e) => !!e.payload.beforeGreens);
   const hasBeforeOriginals = listData.some((e) => !!e.payload.beforeOriginals);
   const hasHightPriorities = listData.some((e) => e.item.isHightPriority);
 
-  const showPositions = false;
   const combineOriginalInfo = true;
 
   listData.sort((a, b) => a.item.priority - b.item.priority);
