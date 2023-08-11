@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.6](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.5...v0.3.6) (2023-08-11)
+
+
+### 🧹 Chore
+
+* **component:** move level training from table to top block in abiturient info ([aea8dfe](https://github.com/YSTUty/ystuty-prkom-web/commit/aea8dfed361a5a821052ff7288113fde56b7e87a))
+* **component:** temp hide position columns ([6d82b59](https://github.com/YSTUty/ystuty-prkom-web/commit/6d82b599fd1dac8685a173947584b118fb09190f))
+* **component:** update hand wave style ([4cae148](https://github.com/YSTUty/ystuty-prkom-web/commit/4cae14882969b9870c9420886684dfd4e387a19e))
+
+
+### 🚀 Features
+
+* **component:** add hand wave component to footer ([465bc67](https://github.com/YSTUty/ystuty-prkom-web/commit/465bc67897e796fc9d8b2bc8d9630cb06d7823f5))
+* **component:** add toggle button show positions in abiturient info ([9b6c397](https://github.com/YSTUty/ystuty-prkom-web/commit/9b6c39748f414c80b99b0944fc70377273f3060d))
+* **component:** add total score column in abituent info table ([9374288](https://github.com/YSTUty/ystuty-prkom-web/commit/9374288f57f3301904979564775afb340287c354))
+* **component:** add user info message ([5d434dd](https://github.com/YSTUty/ystuty-prkom-web/commit/5d434ddb762599c439c46710bafbf36dd77271b2))
+
 ### [0.3.5](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.4...v0.3.5) (2023-07-30)
 
 
