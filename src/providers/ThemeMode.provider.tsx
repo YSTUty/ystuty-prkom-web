@@ -1,9 +1,12 @@
 import React from 'react';
 import store2 from 'store2';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import { blue as primary } from '@mui/material/colors';
+import { amber as secondary } from '@mui/material/colors';
 
-import IconButton from '@mui/material/IconButton';
+import IconButton, { IconButtonTypeMap } from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -15,11 +18,11 @@ const LAST_THEME_MODE = store2.get(STORE_THEME_MODE_KEY, null) as 'light' | 'dar
 
 export const ThemeModeContext = React.createContext({ toggleColorMode: () => {} });
 
-export const ThemeModeButton = () => {
+export const ThemeModeButton: React.FC<Partial<IconButtonTypeMap<{}, 'button'>['props']>> = (props) => {
   const theme = useTheme();
   const colorMode = React.useContext(ThemeModeContext);
   return (
-    <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+    <IconButton onClick={colorMode.toggleColorMode} {...props} color="inherit">
       {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
     </IconButton>
   );
@@ -41,21 +44,24 @@ export const ThemeModeProvider = (props: { children: any }) => {
         });
       },
     }),
-    [prefersDarkMode]
+    [prefersDarkMode],
   );
 
   React.useEffect(() => {
     !LAST_THEME_MODE && setMode(prefersDarkMode ? 'dark' : 'light');
   }, [prefersDarkMode]);
 
-  const theme = React.useMemo(() => createTheme({ palette: { mode, primary } }), [mode]);
+  const theme = React.useMemo(() => createTheme({ palette: { mode, primary, secondary } }), [mode]);
+  const emotionCache = createCache({ key: 'css', speedy: false });
 
   return (
     <ThemeModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
+        <CacheProvider value={emotionCache}>
+          <CssBaseline />
 
-        {props.children}
+          {props.children}
+        </CacheProvider>
       </ThemeProvider>
     </ThemeModeContext.Provider>
   );
