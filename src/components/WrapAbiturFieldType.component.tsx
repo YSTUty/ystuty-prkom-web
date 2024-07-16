@@ -60,6 +60,10 @@ const WrapAbiturFieldType: React.FC<
     // * Strings
     case 'uid':
       return val.replace(/ /g, '\u00a0');
+    case 'docType':
+      return <FormattedMessage id={`DocType.${val || 'none'}`} />;
+    case 'receptionFeatures':
+      return <FormattedMessage id={`ReceptionFeatures.${val || 'none'}`} />;
     default:
       return val;
   }

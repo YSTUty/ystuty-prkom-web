@@ -14,10 +14,30 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IncomingsLinkIcon from '@mui/icons-material/SubjectOutlined';
 import SpecialityItemIcon from '@mui/icons-material/InsertComment';
 
-import { IncomingsLink } from '../interfaces/prkom.interface';
+import { FormTrainingType, IncomingsLink } from '../interfaces/prkom.interface';
+import WrapAbiturFieldType from './WrapAbiturFieldType.component';
 
 const IncomingsLinkList: React.FC<{ list: IncomingsLink[] }> = (props) => {
   const { list } = props;
+
+  const grouppedList = React.useMemo(() => {
+    const result: { [key: string]: IncomingsLink & { formTraining: FormTrainingType } } = {};
+
+    for (const item of list) {
+      for (const spec of item.specialties) {
+        const levelTraining = 1;
+        const { formTraining /* , levelTraining */ } = spec.info;
+        const key = `${formTraining}-${levelTraining}`;
+        if (!result[key]) {
+          const { specialties: _nope, ...rest } = item;
+          result[key] = { ...rest, formTraining, specialties: [] };
+        }
+        result[key].specialties.push(spec);
+      }
+    }
+
+    return result;
+  }, [list]);
 
   return (
     <List
@@ -29,21 +49,41 @@ const IncomingsLinkList: React.FC<{ list: IncomingsLink[] }> = (props) => {
         </ListSubheader>
       }
     >
-      {list.map((info) => (
-        <IncomingsLinkItem key={info.id} info={info} />
+      {Object.values(grouppedList).map((info) => (
+        <IncomingsLinkItem key={info.name + info.formTraining} info={info} />
       ))}
     </List>
   );
 };
 export default IncomingsLinkList;
 
-const IncomingsLinkItem: React.FC<{ info: IncomingsLink }> = (props) => {
+const IncomingsLinkItem: React.FC<{ info: IncomingsLink & { formTraining: FormTrainingType } }> = (props) => {
   const { info } = props;
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
+
+  const grouppedDivision = React.useMemo(() => {
+    const result: {
+      [key: string]: {
+        spec: IncomingsLink['specialties'][0];
+        specs: IncomingsLink['specialties'];
+      };
+    } = {};
+
+    for (const spec of info.specialties) {
+      const { division } = spec.originalInfo;
+      const key = division;
+      if (!result[key]) {
+        result[key] = { spec, specs: [] };
+      }
+      result[key].specs.push(spec);
+    }
+
+    return result;
+  }, [info.specialties]);
 
   return (
     <>
@@ -52,7 +92,11 @@ const IncomingsLinkItem: React.FC<{ info: IncomingsLink }> = (props) => {
           <IncomingsLinkIcon />
         </ListItemIcon>
 
-        <ListItemText primary={info.name} secondary={info.levelType} />
+        <ListItemText
+          primary={info.title + ' / ' + info.desc}
+          secondary={<WrapAbiturFieldType val={info.formTraining} key_="formTraining" />}
+          // primary={info.name} secondary={info.levelType}
+        />
 
         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
@@ -61,14 +105,14 @@ const IncomingsLinkItem: React.FC<{ info: IncomingsLink }> = (props) => {
         <List
           component="div"
           disablePadding
-          subheader={
-            <ListSubheader component="div" inset>
-              {info.fullName}
-            </ListSubheader>
-          }
+          // subheader={
+          //   <ListSubheader component="div" inset>
+          //     {/* {info.fullName} */}
+          //   </ListSubheader>
+          // }
         >
-          {info.specialties.map((spec) => (
-            <SpecialityItem key={spec.id} spec={spec} />
+          {Object.entries(grouppedDivision).map(([key, { spec, specs }]) => (
+            <SpecialityItem key={key} spec={spec} specs={specs} filename={info.name} />
           ))}
         </List>
       </Collapse>
@@ -76,9 +120,13 @@ const IncomingsLinkItem: React.FC<{ info: IncomingsLink }> = (props) => {
   );
 };
 
-const SpecialityItem: React.FC<{ spec: IncomingsLink['specialties'][0] }> = (props) => {
-  const { spec } = props;
-  const { formatMessage } = useIntl();
+const SpecialityItem: React.FC<{
+  filename: string;
+  spec: IncomingsLink['specialties'][0];
+  specs: IncomingsLink['specialties'];
+}> = (props) => {
+  const { filename, spec, specs } = props;
+  // const { formatMessage } = useIntl();
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -92,47 +140,51 @@ const SpecialityItem: React.FC<{ spec: IncomingsLink['specialties'][0] }> = (pro
           <IncomingsLinkIcon />
         </ListItemIcon>
 
-        <ListItemText primary={spec.name} secondary={spec.code} />
+        <ListItemText primary={spec.originalInfo.division} /* secondary={spec.code} */ />
 
         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
 
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {spec.files.map((file) => {
+          {specs.map((spec2) => {
             return (
               <ListItemButton
-                key={file.filename}
+                key={spec2.hash + spec2.info.receptionFeatures}
                 sx={{ pl: 8 }}
-                to={`/view/${file.filename}`}
+                // to={`/view/${file.filename}`}
+                to={`/view/${filename}/${spec2.hash}`}
                 component={Link}
-                disabled={!file.countApplications}
+                // disabled={!file.countApplications}
               >
                 <ListItemIcon>
                   <SpecialityItemIcon />
                 </ListItemIcon>
 
                 <ListItemText
-                  primary={file.name}
-                  secondary={[
-                    // file.countPlaces &&
-                    formatMessage(
-                      { id: 'page.incomings.list.specialityItem.fileInfo.countPlaces' },
-                      { count: file.countPlaces },
-                    ),
-                    // file.countApplications &&
-                    formatMessage(
-                      { id: 'page.incomings.list.specialityItem.fileInfo.countApplications' },
-                      { count: file.countApplications || 0 },
-                    ),
-                    file.countEnrolled &&
-                      formatMessage(
-                        { id: 'page.incomings.list.specialityItem.fileInfo.countEnrolled' },
-                        { count: file.countEnrolled || 0 },
-                      ),
-                  ]
-                    .filter(Boolean)
-                    .join('; ')}
+                  primary={spec2.originalInfo.admissionCategory}
+                  secondary={<WrapAbiturFieldType val={spec2.info.receptionFeatures} key_="receptionFeatures" />}
+                  // primary={file.name}
+
+                  // secondary={[
+                  //   // file.countPlaces &&
+                  //   formatMessage(
+                  //     { id: 'page.incomings.list.specialityItem.fileInfo.countPlaces' },
+                  //     { count: file.countPlaces },
+                  //   ),
+                  //   // file.countApplications &&
+                  //   formatMessage(
+                  //     { id: 'page.incomings.list.specialityItem.fileInfo.countApplications' },
+                  //     { count: file.countApplications || 0 },
+                  //   ),
+                  //   file.countEnrolled &&
+                  //     formatMessage(
+                  //       { id: 'page.incomings.list.specialityItem.fileInfo.countEnrolled' },
+                  //       { count: file.countEnrolled || 0 },
+                  //     ),
+                  // ]
+                  //   .filter(Boolean)
+                  //   .join('; ')}
                 />
               </ListItemButton>
             );

@@ -129,7 +129,7 @@ const App = () => {
       <Container component="main" maxWidth={false} sx={{ mb: 4, px: { xs: 1, sm: 3 } }}>
         <Routes>
           <Route path="/" element={<MainPageContainer />} />
-          <Route path="/view/:fileName" element={<ViewApplicationsContainer />} />
+          <Route path="/view/:fileName/:specHash" element={<ViewApplicationsContainer />} />
           <Route path="/user/:userUid?" element={<ViewUserApplicationsContainer />} />
           {/* <Route path="about" element={<About />} /> */}
         </Routes>

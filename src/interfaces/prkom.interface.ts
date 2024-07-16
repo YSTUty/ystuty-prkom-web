@@ -1,77 +1,24 @@
 export type IncomingsLink = {
-  /** @example `BO` */
-  id: string;
-  /** @example `Магистры. Заочное.` */
-  fullName: string;
-  /**
-   * Уровень подготовки
-   *
-   * @example `Магистры`
-   */
+  title: string;
   name: string;
-  /**
-   * Форма обучения
-   *
-   * @example `Заочное`
-   */
-  levelType: string;
-
-  /** Специальности */
+  desc: string;
+  /** Link to pdf file */
+  docLink: string;
   specialties: {
-    /** @example `BO-1` */
-    id: string;
-    /**
-     * Исходное название специальности (с кодом)
-     *
-     * @example `08.04.01 Строительство.`
-     */
-    fullName: string;
-    /**
-     * Код специальности
-     *
-     * @example `08.04.01`
-     */
-    code: string;
-    /**
-     * Название
-     *
-     * @example `Строительство.`
-     */
-    name: string;
-
-    /** Массив файлов со списками */
-    files: {
-      /**
-       * Название конкурсной группы
-       *
-       * @example `Строительство_ЗФО_платно`
-       */
-      name: string;
-      /**
-       * Название файла
-       *
-       * @example `232_Stroitelstvo_ZFO_platno_PO.html`
-       */
-      filename: string;
-      /**
-       * Количество мест
-       *
-       * @example 15
-       */
-      countPlaces: number;
-      /**
-       * Количество заявлений
-       *
-       * @example 8
-       */
-      countApplications: number;
-      /**
-       * Количество зачислений
-       *
-       * @example 0
-       */
-      countEnrolled: number;
-    }[];
+    info: IncomingsPageInfo;
+    // info: {
+    //   buildDate: string | Date;
+    //   /** Форма обучения */
+    //   formTraining: FormTrainingType;
+    //   basisAdmission: string;
+    //   numbersInfo: {
+    //     total: number;
+    //     enrolled: number;
+    //     toenroll: number;
+    //   };
+    // };
+    originalInfo: IncomingsPageOriginalInfo;
+    hash: string;
   }[];
 };
 
@@ -107,20 +54,24 @@ export enum LevelTrainingType {
 export type IncomingsPageOriginalInfo = {
   /** @example `Дата формирования - 07.07.2022. Время формирования - 15:00:00.` */
   buildDate: string;
-  /** @example `Приемная кампания- Приемная кампания 222 от 31.03.2022 14:06:34` */
-  prkomDate: string;
-  /** @example `Конкурсная группа - Управление по программированию` */
-  competitionGroupName: string;
+  // /** @example `Приемная кампания- Приемная кампания 222 от 31.03.2022 14:06:34` */
+  // prkomDate: string;
+  // /** @example `Конкурсная группа - Управление по программированию` */
+  // competitionGroupName: string;
   /** @example `Форма обучения - Очная` */
   formTraining: string;
-  /** @example `Уровень подготовки - Магистр` */
-  levelTraining: string;
-  /** @example `УГС/Направление подготовки/специальность - 27.04.04 Управление в технических системах` */
-  directionTraining: string;
+  // /** @example `Уровень подготовки - Магистр` */
+  // levelTraining: string;
+  // /** @example `УГС/Направление подготовки/специальность - 27.04.04 Управление в технических системах` */
+  // directionTraining: string;
   /** @example `Основание поступления - Бюджетная основа` */
   basisAdmission: string;
-  /** @example `Источник финансирования - Федеральный бюджет` */
-  sourceFunding: string;
+  // /** @example `Источник финансирования - Федеральный бюджет` */
+  // sourceFunding: string;
+  /** @example `Категория приема - Основные места в рамках контрольных цифр` */
+  admissionCategory: string;
+  /** @example `Подразделение - Исторический факультет / Обществознание и социально-политическая работа` */
+  division: string;
   /** @example `Всего мест: 9. Зачислено: 0. К зачислению: 9.` */
   numbersInfo: string;
 };
@@ -129,20 +80,25 @@ export type IncomingsPageOriginalInfo = {
 export type IncomingsPageInfo = {
   /** Дата и время формирования */
   buildDate: Date;
-  /** Приемная кампания */
+  /** Приемная кампания @deprecated nope in YSPU */
   prkom: {
     /** Номер приемной кампании */
     number: number;
     /** Дата формирования приемной кампании */
     date: Date;
   };
-  /** Конкурсная группа */
+  /**
+   * Конкурсная группа
+   * @deprecated nope in YSPU
+   */
   competitionGroupName: string;
   /** Форма обучения */
-  formTraining: number;
-  /** Уровень подготовки */
+  formTraining: FormTrainingType;
+  /** Особенности приема */
+  receptionFeatures: 'separate' | 'common' | 'none';
+  /** Уровень подготовки @deprecated nope in YSPU */
   levelTraining: number;
-  /** Направление подготовки/специальность */
+  /** Направление подготовки/специальность @deprecated nope in YSPU */
   directionTraining: {
     /** Код */
     code: string;
@@ -151,8 +107,9 @@ export type IncomingsPageInfo = {
   };
   /** Основание поступления */
   basisAdmission: string;
-  /** Источник финансирования */
+  /** Источник финансирования @deprecated nope in YSPU */
   sourceFunding: string;
+
   /** Места */
   numbersInfo: {
     /** Всего мест */
@@ -194,6 +151,10 @@ export type AbiturientInfo_Base = {
   priority: number;
   /** Это высший приоритет */
   isHightPriority: boolean;
+  /** Вид документа */
+  docType: 'copy' | 'original' | null;
+  /** Особенности приема */
+  receptionFeatures: 'separate' | 'common' | 'none';
 };
 
 /** Информация заявления (на бакалавриат и специалитет) */
@@ -208,14 +169,27 @@ export type AbiturientInfo_Magister = AbiturientInfo_Base & {
   scoreExam: number;
 };
 
-export type AbiturientCachedInfo = {
-  isCache: any;
-  response: {
-    info: IncomingsPageInfo;
-    originalInfo: IncomingsPageOriginalInfo;
-    list: AbiturientInfo[];
-    titles: string[];
-  };
+// export type AbiturientCachedInfo = {
+//   isCache: any;
+//   response: {
+//     info: IncomingsPageInfo;
+//     originalInfo: IncomingsPageOriginalInfo;
+//     list: AbiturientInfo[];
+//     titles: string[];
+//   };
+// };
+
+export type SpecRecInfo = {
+  info: IncomingsPageInfo;
+  originalInfo: IncomingsPageOriginalInfo;
+  list: AbiturientInfo[];
+  titles: string[];
+  hash: string;
+};
+
+export type AbiturientCachedInfo2 = {
+  filename: string;
+  response: (SpecRecInfo & { docLink: string }) | Omit<SpecRecInfo, 'list' | 'titles'>[];
 };
 
 export type AbiturientInfoResponse = {
@@ -224,6 +198,7 @@ export type AbiturientInfoResponse = {
   originalInfo: IncomingsPageOriginalInfo;
   item: AbiturientInfo;
   filename: string;
+  hash: string;
   payload: {
     beforeOriginals: number;
     beforeGreens: number;

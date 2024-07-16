@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import store2 from 'store2';
+// import store2 from 'store2';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -18,37 +18,41 @@ import YstuPrkomIcon from '@mui/icons-material/RemoveRedEye';
 
 import { RootState } from '../store';
 import * as envUtils from '../utils/env.utils';
-import { AbiturientCachedInfo } from '../interfaces/prkom.interface';
+import {
+  AbiturientCachedInfo2 as AbiturientCachedInfoResponse_2,
+  // IncomingsPageInfo,
+  // IncomingsPageOriginalInfo,
+} from '../interfaces/prkom.interface';
 
 import AbiturientList from '../components/AbiturientList.component';
 
 const ViewApplications = () => {
-  const { fileName } = useParams();
+  const { fileName, specHash } = useParams();
   const { formatMessage } = useIntl();
   const { userUid } = useSelector<RootState, RootState['app']>((state) => state.app);
 
-  const STORE_CACHED_KEY = `ABIT_INFO_${fileName!.toUpperCase()}`;
+  // const STORE_CACHED_KEY = `ABIT_INFO_${fileName!.toUpperCase()}`;
 
-  const [listData, setListData] = React.useState<AbiturientCachedInfo>();
+  const [listData, setListData] = React.useState<AbiturientCachedInfoResponse_2>();
   const [fetching, setFetching] = React.useState(false);
   const [isCached, setIsCached] = React.useState(false);
   const [fetchedTime, setFetchedTime] = React.useState<number | null>();
   const [errorMsg, setErrorMsg] = React.useState<string | null>();
 
   const applyListData = React.useCallback(
-    (info: AbiturientCachedInfo | null) => {
-      if (!info) {
-        info = store2.get(STORE_CACHED_KEY, null);
-        if (!info) {
-          return;
-        }
-        setIsCached(true);
-      } else if (info.response.list.length > 0) {
-        store2.set(STORE_CACHED_KEY, info);
-        setIsCached(false);
-      }
+    (info: AbiturientCachedInfoResponse_2 | null) => {
+      // if (!info) {
+      //   info = store2.get(STORE_CACHED_KEY, null);
+      //   if (!info) {
+      //     return;
+      //   }
+      //   setIsCached(true);
+      // } else if (info.response.list.length > 0) {
+      //   store2.set(STORE_CACHED_KEY, info);
+      //   setIsCached(false);
+      // }
 
-      setListData(info);
+      if (info) setListData(info);
     },
     [setListData, setIsCached],
   );
@@ -61,14 +65,10 @@ const ViewApplications = () => {
 
       setFetching(true);
 
-      fetch(`${envUtils.apiPath}/v1/admission/full_list?original=true&filename=${fileName}`)
+      fetch(`${envUtils.apiPath}/v1/admission/full_list?original=true&filename=${fileName}&specHash=${specHash}`)
         .then((response) => response.json())
         .then(
-          (
-            response:
-              | ({ filename: string } & AbiturientCachedInfo)
-              | { error: { code: number; error: string; message: string } },
-          ) => {
+          (response: AbiturientCachedInfoResponse_2 | { error: { code: number; error: string; message: string } }) => {
             console.log('response [admission/full_list]', response);
 
             if ('error' in response) {
@@ -134,6 +134,10 @@ const ViewApplications = () => {
 
   const { response } = listData;
 
+  if (Array.isArray(response)) {
+    return <>nope</>;
+  }
+
   return (
     <Box component="main" sx={{ mt: 4, mb: 4 }}>
       <Container component="main" sx={{ mb: 2 }}>
@@ -162,13 +166,15 @@ const ViewApplications = () => {
               {response.info.competitionGroupName}
             </Typography>
           </Typography>
-          {envUtils.linkToYstuPrkom && (
+          {(envUtils.linkToYstuPrkom || response.docLink) && (
             <Typography align="center" pb={2}>
               <Button
                 component="a"
-                href={`${envUtils.linkToYstuPrkom}${fileName}${
-                  userUid ? `#:~:text=${encodeURIComponent(userUid.split('-').pop()!)}` : ''
-                }`}
+                target="_blank"
+                href={
+                  (response.docLink || `${envUtils.linkToYstuPrkom}${fileName}`) +
+                  (userUid ? `#:~:text=${encodeURIComponent(userUid.split('-').pop()!)}` : '')
+                }
                 size="small"
                 // variant="outlined"
                 color="primary"
@@ -184,14 +190,16 @@ const ViewApplications = () => {
           {response.originalInfo && (
             <>
               <Typography>{response.originalInfo.buildDate}</Typography>
-              <Typography>{response.originalInfo.prkomDate}</Typography>
+              {/* <Typography>{response.originalInfo.prkomDate}</Typography> */}
               <Divider sx={{ my: 1 }} />
-              <Typography>{response.originalInfo.competitionGroupName}</Typography>
+              {/* <Typography>{response.originalInfo.competitionGroupName}</Typography> */}
               <Typography>{response.originalInfo.formTraining}</Typography>
-              <Typography>{response.originalInfo.levelTraining}</Typography>
-              <Typography>{response.originalInfo.directionTraining}</Typography>
+              {/* <Typography>{response.originalInfo.levelTraining}</Typography> */}
+              {/* <Typography>{response.originalInfo.directionTraining}</Typography> */}
               <Typography>{response.originalInfo.basisAdmission}</Typography>
-              <Typography>{response.originalInfo.sourceFunding}</Typography>
+              {/* <Typography>{response.originalInfo.sourceFunding}</Typography> */}
+              <Typography>{response.originalInfo.admissionCategory}</Typography>
+              <Typography>{response.originalInfo.division}</Typography>
               <Divider sx={{ my: 1 }} />
               <Typography>{response.originalInfo.numbersInfo}</Typography>
             </>

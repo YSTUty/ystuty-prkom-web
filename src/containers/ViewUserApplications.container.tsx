@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import store2 from 'store2';
+// import store2 from 'store2';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -44,7 +44,7 @@ const ViewUserApplications = () => {
   const userUid = userUid_?.replace(/_/, ' ') || '';
   const uidNumber = userUid.replace(/[^0-9]+/g, '');
 
-  const STORE_CACHED_KEY = `ABIT_INFO_USER_${userUid}`;
+  // const STORE_CACHED_KEY = `ABIT_INFO_USER_${userUid}`;
 
   const [listData, setListData] = React.useState<AbiturientInfoResponse[]>([]);
   const [fetching, setFetching] = React.useState(false);
@@ -54,18 +54,20 @@ const ViewUserApplications = () => {
 
   const applyListData = React.useCallback(
     (info: AbiturientInfoResponse[] | null) => {
+      // if (!info) {
+      //   info = store2.get(STORE_CACHED_KEY, null);
+
+      //   setIsCached(true);
+      // } else if (info.length > 0) {
+      //   store2.set(STORE_CACHED_KEY, info);
+      //   setIsCached(false);
+      // } else {
+      //   setErrorMsg(formatMessage({ id: 'page.user.emptyData' }));
+      // }
+
       if (!info) {
-        info = store2.get(STORE_CACHED_KEY, null);
-        if (!info) {
-          setErrorMsg(formatMessage({ id: 'page.user.emptyData' }));
-          return;
-        }
-        setIsCached(true);
-      } else if (info.length > 0) {
-        store2.set(STORE_CACHED_KEY, info);
-        setIsCached(false);
-      } else {
         setErrorMsg(formatMessage({ id: 'page.user.emptyData' }));
+        return;
       }
 
       setListData(info);
@@ -156,7 +158,7 @@ const ViewUserApplications = () => {
     fetchListData(formatedUid!);
   }, [formatedUid]);
 
-  const levelTrainingArr = Array.from(new Set(listData.map((e) => e.info.levelTraining)));
+  // const levelTrainingArr = Array.from(new Set(listData.map((e) => e.info.levelTraining)));
 
   if (listData.length === 0) {
     return (
@@ -203,9 +205,11 @@ const ViewUserApplications = () => {
             {formatedUid}
           </Button>
         </Typography>
-        <Typography align="center" py={1}>
-          <TelegramButton uid={formatedUid} showText variant="contained" />
-        </Typography>
+        {envUtils.telegramBotUsername && (
+          <Typography align="center" py={1}>
+            <TelegramButton uid={formatedUid} showText variant="contained" />
+          </Typography>
+        )}
         <Typography align="center">
           <FormattedMessage id="page.user.userUid.appCount" values={{ count: listData.length }} />
           {isCached && (
@@ -214,12 +218,12 @@ const ViewUserApplications = () => {
             </Typography>
           )}
         </Typography>
-        <Typography align="center">
+        {/* <Typography align="center">
           <FormattedMessage id="page.abiturient.list.table.header.levelTraining" />:
           <Typography component={'span'} sx={{ px: 1 }}>
             {levelTrainingArr.map((e) => formatMessage({ id: `LevelTrainingType.${LevelTrainingType[e]}` })).join('/')}
           </Typography>
-        </Typography>
+        </Typography> */}
         <IconButton aria-label="expand row" size="small" onClick={() => toggleUserInfoMessage()}>
           {showUserInfoMessage ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
@@ -269,14 +273,16 @@ const ViewUserApplications = () => {
                 {response.originalInfo && (
                   <>
                     <Typography>{response.originalInfo.buildDate}</Typography>
-                    <Typography>{response.originalInfo.prkomDate}</Typography>
+                    {/* <Typography>{response.originalInfo.prkomDate}</Typography> */}
                     <Divider sx={{ my: 1 }} />
-                    <Typography>{response.originalInfo.competitionGroupName}</Typography>
+                    {/* <Typography>{response.originalInfo.competitionGroupName}</Typography> */}
                     <Typography>{response.originalInfo.formTraining}</Typography>
-                    <Typography>{response.originalInfo.levelTraining}</Typography>
-                    <Typography>{response.originalInfo.directionTraining}</Typography>
+                    {/* <Typography>{response.originalInfo.levelTraining}</Typography> */}
+                    {/* <Typography>{response.originalInfo.directionTraining}</Typography> */}
                     <Typography>{response.originalInfo.basisAdmission}</Typography>
-                    <Typography>{response.originalInfo.sourceFunding}</Typography>
+                    {/* <Typography>{response.originalInfo.sourceFunding}</Typography> */}
+                    <Typography>{response.originalInfo.admissionCategory}</Typography>
+                    <Typography>{response.originalInfo.division}</Typography>
                     <Divider sx={{ my: 1 }} />
                     <Typography>{response.originalInfo.numbersInfo}</Typography>
                   </>

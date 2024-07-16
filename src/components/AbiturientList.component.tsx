@@ -20,6 +20,7 @@ import YstuPrkomIcon from '@mui/icons-material/RemoveRedEye';
 import { RootState } from '../store';
 import { AbiturientInfo, AbiturientInfo_Bachelor } from '../interfaces/prkom.interface';
 import * as otherUtil from '../utils/other.util';
+import * as envUtils from '../utils/env.utils';
 import * as egeScoresUtil from '../utils/ege-scores.util';
 
 import TelegramButton from './TelegramButton.component';
@@ -167,6 +168,15 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
     if (combineOriginalInfo || !list.some((e) => e.originalFromEGPU)) {
       otherUtil.removeArrayItem(headerFiltered, 'originalFromEGPU');
     }
+    // otherUtil.removeArrayItem(headerFiltered, 'totalScoreStrict');
+
+    if (!list.some((e) => !e.state)) {
+      otherUtil.removeArrayItem(headerFiltered, 'state');
+    }
+
+    if (!list.some((e) => e.scoreSubjectsSum)) {
+      otherUtil.removeArrayItem(headerFiltered, 'scoreSubjectsSum');
+    }
 
     return { headerFiltered, hasSubjects };
   }, [list, combineOriginalInfo]);
@@ -177,7 +187,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
 
       return (
         <>
-          {!isPersonal && (
+          {!isPersonal && envUtils.telegramBotUsername && (
             <StyledTableCell rowSpan={1} colSpan={1}>
               <TelegramButton uid={row.uid} />
             </StyledTableCell>
@@ -242,6 +252,8 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                         ? 'originalInUniversity'
                         : row.originalFromEGPU
                         ? 'originalFromEGPU'
+                        : row.docType === 'original'
+                        ? 'originalHas'
                         : 'combineOriginalInfoNot'
                       : e
                   }`,
@@ -265,7 +277,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
                     key_={e}
                     val={
                       combineOriginalInfo && e === 'originalInUniversity'
-                        ? row.originalInUniversity || row.originalFromEGPU
+                        ? row.originalInUniversity || row.originalFromEGPU || row.docType === 'original'
                         : undefined
                     }
                   />

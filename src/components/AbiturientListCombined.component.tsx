@@ -50,6 +50,7 @@ const ApplicationTableRow: React.FC<{
   hasBeforeOriginals?: boolean;
   hasHightPriorities?: boolean;
   combineOriginalInfo?: boolean;
+  showState?: boolean;
 }> = (props) => {
   const {
     response,
@@ -59,6 +60,7 @@ const ApplicationTableRow: React.FC<{
     hasBeforeOriginals,
     hasHightPriorities,
     combineOriginalInfo,
+    showState,
   } = props;
   const { formatMessage } = useIntl();
   const [open, setOpen] = React.useState(false);
@@ -100,9 +102,10 @@ const ApplicationTableRow: React.FC<{
         )}
         {showPositions && (
           <>
-            <StyledTableCell align="center">
+            {/* // TODO: need fix numbersInfo */}
+            {/* <StyledTableCell align="center">
               {info.numbersInfo.toenroll || formatMessage({ id: 'page.abiturient.list.enrollFinish' })}
-            </StyledTableCell>
+            </StyledTableCell> */}
             {hasBeforeGreens && (
               <StyledTableCell align="center">
                 {response.payload.beforeGreens ? response.payload.beforeGreens + 1 : '-'}
@@ -116,7 +119,7 @@ const ApplicationTableRow: React.FC<{
         <StyledTableCell>
           <Button
             component={Link}
-            to={`/view/${response.filename}`}
+            to={`/view/${response.filename}/${response.hash}`}
             variant="outlined"
             color="inherit"
             endIcon={<YstuPrkomIcon />}
@@ -124,7 +127,9 @@ const ApplicationTableRow: React.FC<{
             // size="small"
             title={formatMessage({ id: 'page.user.list.viewFull' })}
           >
-            <WrapAbiturFieldType item={info} key_="competitionGroupName" />
+            {/* <WrapAbiturFieldType item={info} key_="competitionGroupName" /> */}
+            {response.originalInfo.division?.replace(/Подразделение - /, '') || '-'}
+            {/* {response.originalInfo.admissionCategory?.replace(/Категория приема - /, '') || '-'} */}
           </Button>
         </StyledTableCell>
         <StyledTableCell>
@@ -136,9 +141,14 @@ const ApplicationTableRow: React.FC<{
         {/* <StyledTableCell>
           <WrapAbiturFieldType item={info} key_="levelTraining" />
         </StyledTableCell> */}
-        <StyledTableCell align="center">
-          <WrapAbiturFieldType item={item} key_="state" />
-        </StyledTableCell>
+        {showState && (
+          <StyledTableCell align="center">
+            <WrapAbiturFieldType item={item} key_="state" />
+          </StyledTableCell>
+        )}
+        {/* <StyledTableCell align="center">
+          <WrapAbiturFieldType item={item} key_="docType" />
+        </StyledTableCell> */}
         <StyledTableCell
           align="center"
           title={formatMessage({
@@ -147,6 +157,8 @@ const ApplicationTableRow: React.FC<{
                 ? 'originalInUniversity'
                 : item.originalFromEGPU
                 ? 'originalFromEGPU'
+                : item.docType === 'original'
+                ? 'originalHas'
                 : 'combineOriginalInfoNot'
             }`,
           })}
@@ -154,7 +166,11 @@ const ApplicationTableRow: React.FC<{
           <WrapAbiturFieldType
             item={item}
             key_="originalInUniversity"
-            val={combineOriginalInfo ? item.originalInUniversity || item.originalFromEGPU : undefined}
+            val={
+              combineOriginalInfo
+                ? item.originalInUniversity || item.originalFromEGPU || item.docType === 'original'
+                : undefined
+            }
           />
         </StyledTableCell>
         {!combineOriginalInfo && (
@@ -168,19 +184,21 @@ const ApplicationTableRow: React.FC<{
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Paper elevation={2} sx={{ my: 2, p: { xs: 2, md: 3 } }}>
               <Typography>{response.originalInfo.buildDate}</Typography>
-              <Typography>{response.originalInfo.prkomDate}</Typography>
+              {/* <Typography>{response.originalInfo.prkomDate}</Typography> */}
               <Divider sx={{ my: 1 }} />
-              <Typography>{response.originalInfo.competitionGroupName}</Typography>
+              {/* <Typography>{response.originalInfo.competitionGroupName}</Typography> */}
               <Typography>{response.originalInfo.formTraining}</Typography>
-              <Typography>{response.originalInfo.levelTraining}</Typography>
-              <Typography>{response.originalInfo.directionTraining}</Typography>
+              {/* <Typography>{response.originalInfo.levelTraining}</Typography> */}
+              {/* <Typography>{response.originalInfo.directionTraining}</Typography> */}
               <Typography>{response.originalInfo.basisAdmission}</Typography>
-              <Typography>{response.originalInfo.sourceFunding}</Typography>
+              {/* <Typography>{response.originalInfo.sourceFunding}</Typography> */}
+              <Typography>{response.originalInfo.admissionCategory}</Typography>
+              <Typography>{response.originalInfo.division}</Typography>
               <Divider sx={{ my: 1 }} />
               <Typography>{response.originalInfo.numbersInfo}</Typography>
 
               <Divider sx={{ my: 1 }} />
-              <Button component={Link} to={`/view/${response.filename}`}>
+              <Button component={Link} to={`/view/${response.filename}/${response.hash}`}>
                 <FormattedMessage id="page.user.list.viewFull" />
               </Button>
             </Paper>
@@ -191,11 +209,15 @@ const ApplicationTableRow: React.FC<{
   );
 };
 
-const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; showPositions?: boolean }> = (props) => {
+const AbiturientListCombined: React.FC<{
+  listData: AbiturientInfoResponse[];
+  showPositions?: boolean;
+}> = (props) => {
   const { listData, showPositions = true } = props;
   const hasBeforeGreens = listData.some((e) => !!e.payload.beforeGreens);
   const hasBeforeOriginals = listData.some((e) => !!e.payload.beforeOriginals);
   const hasHightPriorities = listData.some((e) => e.item.isHightPriority);
+  const showState = listData.some((e) => !e.item.state);
 
   const combineOriginalInfo = true;
 
@@ -225,9 +247,10 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; sho
             )}
             {showPositions && (
               <>
-                <StyledTableCell align="center">
+                {/* // TODO: need fix numbersInfo */}
+                {/* <StyledTableCell align="center">
                   <FormattedMessage id="page.abiturient.list.table.header.enroll" />
-                </StyledTableCell>
+                </StyledTableCell> */}
                 {hasBeforeGreens && (
                   <StyledTableCell align="center">
                     <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
@@ -241,7 +264,8 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; sho
               </>
             )}
             <StyledTableCell>
-              <FormattedMessage id="page.abiturient.list.table.header.competitionGroupName" />
+              {/* <FormattedMessage id="page.abiturient.list.table.header.competitionGroupName" /> */}
+              <FormattedMessage id="page.abiturient.list.table.header.division" />
             </StyledTableCell>
             <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.totalScore" />
@@ -252,9 +276,14 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; sho
             {/* <StyledTableCell>
               <FormattedMessage id="page.abiturient.list.table.header.levelTraining" />
             </StyledTableCell> */}
-            <StyledTableCell align="center">
-              <FormattedMessage id="page.abiturient.list.table.header.state" />
-            </StyledTableCell>
+            {showState && (
+              <StyledTableCell align="center">
+                <FormattedMessage id="page.abiturient.list.table.header.state" />
+              </StyledTableCell>
+            )}
+            {/* <StyledTableCell align="center">
+              <FormattedMessage id="page.abiturient.list.table.header.docType" />
+            </StyledTableCell> */}
             <StyledTableCell align="center">
               <FormattedMessage
                 id={`page.abiturient.list.table.header.${
@@ -273,13 +302,14 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; sho
         <TableBody>
           {listData.map((response) => (
             <ApplicationTableRow
-              key={response.filename}
+              key={response.filename + response.hash}
               response={response}
               showPositions={showPositions}
               hasBeforeGreens={hasBeforeGreens}
               hasBeforeOriginals={hasBeforeOriginals}
               hasHightPriorities={hasHightPriorities}
               combineOriginalInfo={combineOriginalInfo}
+              showState={showState}
             />
           ))}
         </TableBody>

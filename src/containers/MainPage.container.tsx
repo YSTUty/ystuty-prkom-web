@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import store2 from 'store2';
+// import store2 from 'store2';
 
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
@@ -30,15 +30,19 @@ const MainPage = () => {
 
   const applyListData = React.useCallback(
     (items: IncomingsLink[] | null) => {
+      // if (!items) {
+      //   items = store2.get(STORE_CACHED_FULL_LIST_KEY, null);
+      //   if (!items) {
+      //     return;
+      //   }
+      //   setIsCached(true);
+      // } else if (items.length > 0) {
+      //   store2.set(STORE_CACHED_FULL_LIST_KEY, items);
+      //   setIsCached(false);
+      // }
+
       if (!items) {
-        items = store2.get(STORE_CACHED_FULL_LIST_KEY, null);
-        if (!items) {
-          return;
-        }
-        setIsCached(true);
-      } else if (items.length > 0) {
-        store2.set(STORE_CACHED_FULL_LIST_KEY, items);
-        setIsCached(false);
+        return;
       }
 
       setListData(items);
@@ -83,13 +87,13 @@ const MainPage = () => {
   }, [fetching, setFetching, applyListData, setFetchedTime, setErrorMsg]);
 
   React.useEffect(() => {
-    if (Math.random() > 0.6) {
-      const items = store2.get(STORE_CACHED_FULL_LIST_KEY, null) as any[];
-      if (items?.length > 0) {
-        applyListData(null);
-        return;
-      }
-    }
+    // if (Math.random() > 0.6) {
+    //   const items = store2.get(STORE_CACHED_FULL_LIST_KEY, null) as any[];
+    //   if (items?.length > 0) {
+    //     applyListData(null);
+    //     return;
+    //   }
+    // }
     fetchListData();
   }, []);
 
