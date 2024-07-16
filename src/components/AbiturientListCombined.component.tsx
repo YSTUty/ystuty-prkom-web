@@ -102,10 +102,11 @@ const ApplicationTableRow: React.FC<{
         )}
         {showPositions && (
           <>
-            {/* // TODO: need fix numbersInfo */}
-            {/* <StyledTableCell align="center">
-              {info.numbersInfo.toenroll || formatMessage({ id: 'page.abiturient.list.enrollFinish' })}
-            </StyledTableCell> */}
+            <StyledTableCell align="center">
+              {info.numbersInfo.toenroll ||
+                info.numbersInfo.total ||
+                formatMessage({ id: 'page.abiturient.list.enrollFinish' })}
+            </StyledTableCell>
             {hasBeforeGreens && (
               <StyledTableCell align="center">
                 {response.payload.beforeGreens ? response.payload.beforeGreens + 1 : '-'}
@@ -247,10 +248,9 @@ const AbiturientListCombined: React.FC<{
             )}
             {showPositions && (
               <>
-                {/* // TODO: need fix numbersInfo */}
-                {/* <StyledTableCell align="center">
+                <StyledTableCell align="center">
                   <FormattedMessage id="page.abiturient.list.table.header.enroll" />
-                </StyledTableCell> */}
+                </StyledTableCell>
                 {hasBeforeGreens && (
                   <StyledTableCell align="center">
                     <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />

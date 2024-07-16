@@ -305,7 +305,7 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
         fixedHeaderContent={() => (
           <>
             <StyledTableRow ref={tableHeaderRef} sx={{ '& > *': { borderBottom: 'grey' } }}>
-              {!isPersonal && (
+              {!isPersonal && envUtils.telegramBotUsername && (
                 <StyledTableCell rowSpan={2} width={66}>
                   Bot
                 </StyledTableCell>
