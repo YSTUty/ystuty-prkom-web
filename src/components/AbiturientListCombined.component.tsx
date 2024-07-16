@@ -128,8 +128,8 @@ const ApplicationTableRow: React.FC<{
             title={formatMessage({ id: 'page.user.list.viewFull' })}
           >
             {/* <WrapAbiturFieldType item={info} key_="competitionGroupName" /> */}
-            {response.originalInfo.division?.replace(/Подразделение - /, '') || '-'}
-            {/* {response.originalInfo.admissionCategory?.replace(/Категория приема - /, '') || '-'} */}
+            {response.info.division || '-'}
+            {/* {response.info.admissionCategory || '-'} */}
           </Button>
         </StyledTableCell>
         <StyledTableCell>

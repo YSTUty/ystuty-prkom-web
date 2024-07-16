@@ -4,22 +4,7 @@ export type IncomingsLink = {
   desc: string;
   /** Link to pdf file */
   docLink: string;
-  specialties: {
-    info: IncomingsPageInfo;
-    // info: {
-    //   buildDate: string | Date;
-    //   /** Форма обучения */
-    //   formTraining: FormTrainingType;
-    //   basisAdmission: string;
-    //   numbersInfo: {
-    //     total: number;
-    //     enrolled: number;
-    //     toenroll: number;
-    //   };
-    // };
-    originalInfo: IncomingsPageOriginalInfo;
-    hash: string;
-  }[];
+  specialties: Omit<SpecRecInfo, 'list' | 'titles'>[];
 };
 
 /** Тип состояния заявления */
@@ -89,7 +74,7 @@ export type IncomingsPageInfo = {
   };
   /**
    * Конкурсная группа
-   * @deprecated nope in YSPU
+   * //@deprecated nope in YSPU
    */
   competitionGroupName: string;
   /** Форма обучения */
@@ -107,6 +92,11 @@ export type IncomingsPageInfo = {
   };
   /** Основание поступления */
   basisAdmission: string;
+  /** Категория приема */
+  admissionCategory: string;
+  /** Подразделение */
+  division: string;
+
   /** Источник финансирования @deprecated nope in YSPU */
   sourceFunding: string;
 
@@ -185,6 +175,10 @@ export type SpecRecInfo = {
   list: AbiturientInfo[];
   titles: string[];
   hash: string;
+
+  countPlaces: number;
+  countApplications: number;
+  countEnrolled: number;
 };
 
 export type AbiturientCachedInfo2 = {

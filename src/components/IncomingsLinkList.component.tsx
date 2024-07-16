@@ -126,7 +126,7 @@ const SpecialityItem: React.FC<{
   specs: IncomingsLink['specialties'];
 }> = (props) => {
   const { filename, spec, specs } = props;
-  // const { formatMessage } = useIntl();
+  const { formatMessage } = useIntl();
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -163,28 +163,32 @@ const SpecialityItem: React.FC<{
 
                 <ListItemText
                   primary={spec2.originalInfo.admissionCategory}
-                  secondary={<WrapAbiturFieldType val={spec2.info.receptionFeatures} key_="receptionFeatures" />}
                   // primary={file.name}
 
-                  // secondary={[
-                  //   // file.countPlaces &&
-                  //   formatMessage(
-                  //     { id: 'page.incomings.list.specialityItem.fileInfo.countPlaces' },
-                  //     { count: file.countPlaces },
-                  //   ),
-                  //   // file.countApplications &&
-                  //   formatMessage(
-                  //     { id: 'page.incomings.list.specialityItem.fileInfo.countApplications' },
-                  //     { count: file.countApplications || 0 },
-                  //   ),
-                  //   file.countEnrolled &&
-                  //     formatMessage(
-                  //       { id: 'page.incomings.list.specialityItem.fileInfo.countEnrolled' },
-                  //       { count: file.countEnrolled || 0 },
-                  //     ),
-                  // ]
-                  //   .filter(Boolean)
-                  //   .join('; ')}
+                  secondary={
+                    <>
+                      <WrapAbiturFieldType val={spec2.info.receptionFeatures} key_="receptionFeatures" /> -{' '}
+                      {[
+                        // spec2.countPlaces &&
+                        formatMessage(
+                          { id: 'page.incomings.list.specialityItem.fileInfo.countPlaces' },
+                          { count: spec2.countPlaces || 0 },
+                        ),
+                        // spec2.countApplications &&
+                        formatMessage(
+                          { id: 'page.incomings.list.specialityItem.fileInfo.countApplications' },
+                          { count: spec2.countApplications || 0 },
+                        ),
+                        spec2.countEnrolled &&
+                          formatMessage(
+                            { id: 'page.incomings.list.specialityItem.fileInfo.countEnrolled' },
+                            { count: spec2.countEnrolled || 0 },
+                          ),
+                      ]
+                        .filter(Boolean)
+                        .join('; ')}
+                    </>
+                  }
                 />
               </ListItemButton>
             );
