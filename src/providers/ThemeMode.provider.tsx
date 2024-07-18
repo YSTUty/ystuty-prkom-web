@@ -4,7 +4,7 @@ import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import { blue as primary } from '@mui/material/colors';
-import { amber as secondary } from '@mui/material/colors';
+import { purple as secondary } from '@mui/material/colors';
 
 import IconButton, { IconButtonTypeMap } from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
