@@ -50,6 +50,8 @@ const WrapAbiturFieldType: React.FC<
       ) : (
         <RemoveIcon color="secondary" />
       );
+    case 'contractNumber':
+      return val ? val : <RemoveIcon color="secondary" />;
     // * Enum
     case 'state':
       return <FormattedMessage id={`AbiturientInfoStateType.${AbiturientInfoStateType[val]}`} />;

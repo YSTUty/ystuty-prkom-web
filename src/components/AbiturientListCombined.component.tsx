@@ -50,6 +50,7 @@ const ApplicationTableRow: React.FC<{
   hasBeforeOriginals?: boolean;
   hasHightPriorities?: boolean;
   combineOriginalInfo?: boolean;
+  hasContractNumber?: boolean;
 }> = (props) => {
   const {
     response,
@@ -59,6 +60,7 @@ const ApplicationTableRow: React.FC<{
     hasBeforeOriginals,
     hasHightPriorities,
     combineOriginalInfo,
+    hasContractNumber,
   } = props;
   const { formatMessage } = useIntl();
   const [open, setOpen] = React.useState(false);
@@ -139,27 +141,35 @@ const ApplicationTableRow: React.FC<{
         <StyledTableCell align="center">
           <WrapAbiturFieldType item={item} key_="state" />
         </StyledTableCell>
-        <StyledTableCell
-          align="center"
-          title={formatMessage({
-            id: `page.abiturient.list.table.header.${
-              item.originalInUniversity
-                ? 'originalInUniversity'
-                : item.originalFromEGPU
-                ? 'originalFromEGPU'
-                : 'combineOriginalInfoNot'
-            }`,
-          })}
-        >
-          <WrapAbiturFieldType
-            item={item}
-            key_="originalInUniversity"
-            val={combineOriginalInfo ? item.originalInUniversity || item.originalFromEGPU : undefined}
-          />
-        </StyledTableCell>
-        {!combineOriginalInfo && (
+        {!hasContractNumber ? (
+          <>
+            <StyledTableCell
+              align="center"
+              title={formatMessage({
+                id: `page.abiturient.list.table.header.${
+                  item.originalInUniversity
+                    ? 'originalInUniversity'
+                    : item.originalFromEGPU
+                    ? 'originalFromEGPU'
+                    : 'combineOriginalInfoNot'
+                }`,
+              })}
+            >
+              <WrapAbiturFieldType
+                item={item}
+                key_="originalInUniversity"
+                val={combineOriginalInfo ? item.originalInUniversity || item.originalFromEGPU : undefined}
+              />
+            </StyledTableCell>
+            {!combineOriginalInfo && (
+              <StyledTableCell align="center">
+                <WrapAbiturFieldType item={item} key_="originalFromEGPU" />
+              </StyledTableCell>
+            )}
+          </>
+        ) : (
           <StyledTableCell align="center">
-            <WrapAbiturFieldType item={item} key_="originalFromEGPU" />
+            <WrapAbiturFieldType item={item} key_="contractNumber" />
           </StyledTableCell>
         )}
       </TableRow>
@@ -201,12 +211,20 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; sho
 
   listData.sort((a, b) => a.item.priority - b.item.priority);
 
+  const hasContractNumber = React.useMemo(() => listData.some((e) => 'contractNumber' in e.item), [listData]);
+
+  const hasOriginalData = React.useMemo(
+    // () => listData.some((e) => e.item.originalInUniversity || e.item.originalFromEGPU),
+    () => listData.some((e) => 'originalInUniversity' in e.item || 'originalFromEGPU' in e.item),
+    [listData],
+  );
+
   if (listData.length === 0) {
     return null;
   }
 
-  return (
-    <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 120px)' }}>
+  const drawTable = (withContractNumber = false) => (
+    <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 120px)', py: 1 }}>
       <Table stickyHeader sx={{ minWidth: 650 }} size="small" aria-label="Abiturient list">
         <TableHead>
           <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -255,36 +273,56 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; sho
             <StyledTableCell align="center">
               <FormattedMessage id="page.abiturient.list.table.header.state" />
             </StyledTableCell>
-            <StyledTableCell align="center">
-              <FormattedMessage
-                id={`page.abiturient.list.table.header.${
-                  combineOriginalInfo ? 'combineOriginalInfo' : 'originalInUniversity'
-                }`}
-              />
-            </StyledTableCell>
-            {!combineOriginalInfo && (
-              <StyledTableCell align="center">
-                <FormattedMessage id="page.abiturient.list.table.header.originalFromEGPU" />
+            {!withContractNumber ? (
+              <>
+                <StyledTableCell align="center" width={150}>
+                  <FormattedMessage
+                    id={`page.abiturient.list.table.header.${
+                      combineOriginalInfo ? 'combineOriginalInfo' : 'originalInUniversity'
+                    }`}
+                  />
+                </StyledTableCell>
+                {!combineOriginalInfo && (
+                  <StyledTableCell align="center" width={150}>
+                    <FormattedMessage id="page.abiturient.list.table.header.originalFromEGPU" />
+                  </StyledTableCell>
+                )}
+              </>
+            ) : (
+              <StyledTableCell align="center" width={150}>
+                <FormattedMessage id="page.abiturient.list.table.header.contractNumber" />
               </StyledTableCell>
             )}
           </StyledTableRow>
         </TableHead>
 
         <TableBody>
-          {listData.map((response) => (
-            <ApplicationTableRow
-              key={response.filename}
-              response={response}
-              showPositions={showPositions}
-              hasBeforeGreens={hasBeforeGreens}
-              hasBeforeOriginals={hasBeforeOriginals}
-              hasHightPriorities={hasHightPriorities}
-              combineOriginalInfo={combineOriginalInfo}
-            />
-          ))}
+          {listData.map(
+            (response) =>
+              ((withContractNumber && 'contractNumber' in response.item) ||
+                (!withContractNumber && !('contractNumber' in response.item))) && (
+                <ApplicationTableRow
+                  key={response.filename}
+                  response={response}
+                  showPositions={showPositions}
+                  hasBeforeGreens={hasBeforeGreens}
+                  hasBeforeOriginals={hasBeforeOriginals}
+                  hasHightPriorities={hasHightPriorities}
+                  combineOriginalInfo={combineOriginalInfo}
+                  hasContractNumber={withContractNumber /* hasContractNumber */}
+                />
+              ),
+          )}
         </TableBody>
       </Table>
     </TableContainer>
+  );
+
+  return (
+    <>
+      {hasOriginalData && drawTable()}
+      {hasContractNumber && drawTable(true)}
+    </>
   );
 };
 export default AbiturientListCombined;

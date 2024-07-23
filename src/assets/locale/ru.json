@@ -29,6 +29,7 @@
   "page.abiturient.list.table.header.isHightPriority": "Это высший приоритет",
   "page.abiturient.list.table.header.scoreSubjects": "Баллы по предметам",
   "page.abiturient.list.table.header.scoreExam": "Вступительное испытание",
+  "page.abiturient.list.table.header.contractNumber": "Договор. Номер договора (из заявления)",
   "page.abiturient.list.table.header.competitionGroupName": "Конкурсная группа",
   "page.abiturient.list.table.header.formTraining": "Форма обучения",
   "page.abiturient.list.table.header.levelTraining": "Уровень подготовки",

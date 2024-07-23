@@ -139,6 +139,8 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
     return () => void alreadyScrolled && clearInterval(interval);
   }, [list, isPersonal, scrollToRow, setAlreadyScrolled]);
 
+  const hasContractNumber = React.useMemo(() => list.some((e) => 'contractNumber' in e), [list]);
+
   const { headerFiltered, hasSubjects } = React.useMemo(() => {
     const [firstItem] = list;
     if (!firstItem) {
@@ -168,8 +170,16 @@ const AbiturientList: React.FC<{ list: AbiturientInfo[]; titles?: string[]; isPe
       otherUtil.removeArrayItem(headerFiltered, 'originalFromEGPU');
     }
 
+    if (!hasContractNumber) {
+      otherUtil.removeArrayItem(headerFiltered, 'contractNumber');
+    }
+    if (hasContractNumber /* || !list.some((e) => e.originalInUniversity || e.originalFromEGPU) */) {
+      otherUtil.removeArrayItem(headerFiltered, 'originalFromEGPU');
+      otherUtil.removeArrayItem(headerFiltered, 'originalInUniversity');
+    }
+
     return { headerFiltered, hasSubjects };
-  }, [list, combineOriginalInfo]);
+  }, [list, /* hasContractNumber, */ combineOriginalInfo]);
 
   const rowContent = React.useCallback(
     (_index: number, row: AbiturientInfo) => {
