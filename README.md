@@ -7,7 +7,7 @@
   <a href="https://t.me/ystu_pk_bot"><img src="https://img.shields.io/badge/Bot-Use now-229ED9?style=flat-square&logo=telegram" alt="Use Telegram bot now"/></a>
 </p>
 
-# [YSTUty] Списки поступающих *(PrKom List)*
+# [YSTUty] Списки к зачислению ~~Списки поступающих~~ *(PrKom List)*
 
 > Решение, использующее данные из сервиса [YSTUty-prkom](https://github.com/YSTUty/ystuty-prkom), для гибкого вывода списков поступающих.
 
