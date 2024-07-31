@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.7](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.6...v0.3.7) (2024-07-31)
+
+
+### 🧹 Chore
+
+* change text `Списки поступающих` to `Списки к зачислению` ([a0b9538](https://github.com/YSTUty/ystuty-prkom-web/commit/a0b95385518a8eaf2f1cc0d75db32ef7b449b038))
+* **theme:** disable speedy for emotion cache css ([8cbcc68](https://github.com/YSTUty/ystuty-prkom-web/commit/8cbcc6841f3dc149d2ab0d3ee79c4c45df75f976))
+* **theme:** update `secondary` color ([5a9b80b](https://github.com/YSTUty/ystuty-prkom-web/commit/5a9b80b7858c787dd496adc9e059e9d4851749cb))
+
+
+### 🚀 Features
+
+* add `contractNumber` field ([12bcf9b](https://github.com/YSTUty/ystuty-prkom-web/commit/12bcf9b6400b02c747186ae552758ecec234d24a))
+* add info messages ([54d6eed](https://github.com/YSTUty/ystuty-prkom-web/commit/54d6eed315db02e07d4e57dd56b0a5ba9915a287))
+
 ### [0.3.6](https://github.com/YSTUty/ystuty-prkom-web/compare/v0.3.5...v0.3.6) (2023-08-11)
 
 
