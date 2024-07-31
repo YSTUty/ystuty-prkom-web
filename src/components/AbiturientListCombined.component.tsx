@@ -110,7 +110,7 @@ const ApplicationTableRow: React.FC<{
                 {response.payload.beforeGreens ? response.payload.beforeGreens + 1 : '-'}
               </StyledTableCell>
             )}
-            {hasBeforeOriginals && (
+            {!hasContractNumber && hasBeforeOriginals && (
               <StyledTableCell align="center">{(response.payload.beforeOriginals || 0) + 1}</StyledTableCell>
             )}
           </>
@@ -251,7 +251,7 @@ const AbiturientListCombined: React.FC<{ listData: AbiturientInfoResponse[]; sho
                     <FormattedMessage id="page.abiturient.list.table.header.beforeGreens" />
                   </StyledTableCell>
                 )}
-                {hasBeforeOriginals && (
+                {!withContractNumber && hasBeforeOriginals && (
                   <StyledTableCell align="center">
                     <FormattedMessage id="page.abiturient.list.table.header.beforeOriginals" />
                   </StyledTableCell>
