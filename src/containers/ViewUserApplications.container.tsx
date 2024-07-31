@@ -25,7 +25,7 @@ import appSlice from '../store/reducer/app.slice';
 import * as envUtils from '../utils/env.utils';
 import * as otherUtils from '../utils/other.util';
 import { AbiturientInfoResponse, LevelTrainingType } from '../interfaces/prkom.interface';
-import { RootState } from '../store';
+import { useAppSelector } from '../store';
 
 import AbiturientList from '../components/AbiturientList.component';
 import TelegramButton from '../components/TelegramButton.component';
@@ -36,11 +36,8 @@ const ViewUserApplications = () => {
   const dispatch = useDispatch();
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
-  const {
-    userUid: queryUserUid,
-    showUserInfoMessage,
-    showPositions,
-  } = useSelector<RootState, RootState['app']>((state) => state.app);
+
+  const { userUid: queryUserUid, showInfoMessage, showPositions } = useAppSelector((state) => state.app);
   const userUid = userUid_?.replace(/_/, ' ') || '';
   const uidNumber = userUid.replace(/[^0-9]+/g, '');
 
@@ -118,7 +115,7 @@ const ViewUserApplications = () => {
   }, [formatedUid]);
 
   const toggleUserInfoMessage = React.useCallback(() => {
-    dispatch(appSlice.actions.toggleUserInfoMessage());
+    dispatch(appSlice.actions.toggleInfoMessage({ type: 'userView' }));
   }, []);
 
   const toggleShowPositions = React.useCallback(() => {
@@ -221,7 +218,7 @@ const ViewUserApplications = () => {
           </Typography>
         </Typography>
         <IconButton aria-label="expand row" size="small" onClick={() => toggleUserInfoMessage()}>
-          {showUserInfoMessage ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          {showInfoMessage.userView ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
         <IconButton aria-label="expand row" size="small" onClick={() => toggleShowPositions()}>
           {showPositions ? <AdditionalShowIcon /> : <AdditionalHideIcon />}
@@ -229,7 +226,7 @@ const ViewUserApplications = () => {
       </Paper>
 
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Collapse in={showUserInfoMessage} timeout="auto" unmountOnExit>
+        <Collapse in={showInfoMessage.userView} timeout="auto" unmountOnExit>
           <Paper elevation={5} sx={{ my: { xs: 2, md: 3 }, p: 3, minWidth: '40vw' }}>
             <IconButton size="small" onClick={() => toggleUserInfoMessage()}>
               <CloseIcon />
@@ -245,7 +242,7 @@ const ViewUserApplications = () => {
                 py={1}
                 key={num}
               >
-                <FormattedMessage id={`page.user.infoMessage.${num}`} />
+                <FormattedMessage id={`page.infoMessage.userView.${num}`} />
               </Typography>
             ))}
           </Paper>

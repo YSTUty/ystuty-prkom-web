@@ -2,17 +2,33 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import store2 from 'store2';
 import ym from '@appigram/react-yandex-metrika';
 
+// type InfoMessageType = 'mainPage' | 'userView';
+type InfoMessageType = {
+  mainPage: boolean;
+  userView: boolean;
+};
+
 export interface IAppState {
   userUid: string;
-  showUserInfoMessage: boolean;
+  // showInfoMessage: Record<InfoMessageType, boolean>;
+  showInfoMessage: InfoMessageType;
   showPositions: boolean;
 }
 const urlParams = new URLSearchParams(window.location.search);
 const userUid = urlParams.get('userUid');
 
+function prepareshowInfoMessage(rec: Partial<InfoMessageType>): InfoMessageType {
+  console.log('rec', rec);
+
+  return {
+    mainPage: rec?.mainPage ?? true,
+    userView: rec?.userView ?? true,
+  };
+}
+
 const initialState: IAppState = {
   userUid: userUid || store2.get('app.userUid') || '',
-  showUserInfoMessage: store2.get('app.showUserInfoMessage') ?? true,
+  showInfoMessage: prepareshowInfoMessage(store2.get('app.showInfoMessage')),
   showPositions: store2.get('app.showPositions') ?? false,
 };
 
@@ -25,14 +41,14 @@ export const appSlice = createSlice({
       state.userUid = val;
       store2.set('app.userUid', val);
     },
-    toggleUserInfoMessage: (state, action: PayloadAction<boolean | undefined>) => {
-      state.showUserInfoMessage = action.payload ?? !state.showUserInfoMessage;
-      if (!state.showUserInfoMessage) {
+    toggleInfoMessage: (state, action: PayloadAction<{ type: keyof InfoMessageType; power?: boolean }>) => {
+      state.showInfoMessage[action.payload.type] = action.payload.power ?? !state.showInfoMessage[action.payload.type];
+      if (!state.showInfoMessage.userView) {
         try {
           ym('reachGoal', 'page.user.infoMessage-close');
         } catch {}
       }
-      store2.set('app.showUserInfoMessage', state.showUserInfoMessage);
+      store2.set('app.showInfoMessage', state.showInfoMessage);
     },
     toggleShowPositions: (state, action: PayloadAction<boolean | undefined>) => {
       state.showPositions = action.payload ?? !state.showPositions;
